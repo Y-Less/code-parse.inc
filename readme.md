@@ -1261,12 +1261,23 @@ This is not:
 
 timer length_required(arr[])
 {
-}```
+}
+```
 
 This is fine:
 
 ```pawn
 #define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
+
+timer length_required(arr[], len = sizeof (arr))
+{
+}
+```
+
+This is not:
+
+```pawn
+#define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:LEN:NUM_CST_DEF:)(%0(%1)) [%2]()(%1)##$
 
 timer length_required(arr[], len = sizeof (arr))
 {
@@ -1284,7 +1295,8 @@ timer length_required(arr[], len = sizeof (arr))
 ```
 
 The last one is not allowed because only `NUM_CST` was given, not `NUM_CST_DEF`,
-so default values on numbers are not allowed.
+so default values on numbers are not allowed.  The penultimate one has `LEN:` in
+the wrong place - this might work slightly, but not fully.
 
 ## API
 
