@@ -968,12 +968,12 @@ flexibility you want to allow - maybe default values can be banned for example.
 ```pawn
 #define remote%0(%1) FUNC_PARSER(REMOTE,ARR_CST:STR_CST_DEF:NUM_CST_DEF:RET_TAG_VOD_STR:)(%0(%1)) ()(%1)##$
 
-#define REMOTE_STR_DEF(%0,%1,%2,%3,%4)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6s#%7,_:(%2)$
-#define REMOTE_NUM_DEF(%0,%1,%2,%4)%8$(%9)(%5)#%6#%7$    %8$(%9,%0%2)(%5)#%6i#%7,_:(%2)$
+#define REMOTE_STR_DEF(%0,%1,%2,%3,%4)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6s#%7,%2$
+#define REMOTE_NUM_DEF(%0,%1,%2,%4)%8$(%9)(%5)#%6#%7$    %8$(%9,%0%2)(%5)#%6i#%7,%2$
 
-#define REMOTE_ARR(%0,%1,%2,%3)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6a#%7,_:(%2)$
-#define REMOTE_STR(%0,%1,%2,%3)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6s#%7,_:(%2)$
-#define REMOTE_NUM(%0,%1,%2)%8$(%9)(%5)#%6#%7$    %8$(%9,%0%2)(%5)#%6i#%7,_:(%2)$
+#define REMOTE_ARR(%0,%1,%2,%3)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6a#%7,%2$
+#define REMOTE_STR(%0,%1,%2,%3)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6s#%7,%2$
+#define REMOTE_NUM(%0,%1,%2)%8$(%9)(%5)#%6#%7$    %8$(%9,%0%2)(%5)#%6i#%7,%2$
 
 #define REMOTE_END(%9)%8$(,%1)(%5)#%6#,%7$ %8$ \
 	stock %9(%5) return CallRemoteFunction("remote_"#%9, #%6#,%7); \
@@ -1129,13 +1129,13 @@ code.  See Slice's include if you want a simple ready-made independent fix for
 that.
 
 ```pawn
-#define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:)(%0(%1)) [%2]()(%1)##$
+#define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
 
-#define TIMER_STR_DEF(%0,%1,%2,%3,%4)%8$[%1](%9)(%5)#%6#%7$ %8$[%1](%9,%0%2[%3])(%5)#%6s#%7,_:(%2)$
-#define TIMER_NUM_DEF(%0,%1,%2,%4)%8$[%1](%9)(%5)#%6#%7$    %8$[%1](%9,%0%2)(%5)#%6i#%7,_:(%2)$
-#define TIMER_ARR(%0,%1,%2,%3)%8$[%1](%9)(%5)#%6#%7$        %8$[%1](%9,%0%2[%3])(%5)#%6a#%7,_:(%2)$
-#define TIMER_STR(%0,%1,%2,%3)%8$[%1](%9)(%5)#%6#%7$        %8$[%1](%9,%0%2[%3])(%5)#%6s#%7,_:(%2)$
-#define TIMER_NUM(%0,%1,%2)%8$[%1](%9)(%5)#%6#%7$           %8$[%1](%9,%0%2)(%5)#%6i#%7,_:(%2)$
+#define TIMER_STR_DEF(%0,%1,%2,%3,%4)%8$[%1](%9)(%5)#%6#%7$ %8$[%1](%9,%0%2[%3])(%5)#%6s#%7,%2$
+#define TIMER_NUM_DEF(%0,%1,%2,%4)%8$[%1](%9)(%5)#%6#%7$    %8$[%1](%9,%0%2)(%5)#%6i#%7,%2$
+#define TIMER_ARR(%0,%1,%2,%3)%8$[%1](%9)(%5)#%6#%7$        %8$[%1](%9,%0%2[%3])(%5)#%6a#%7,%2$
+#define TIMER_STR(%0,%1,%2,%3)%8$[%1](%9)(%5)#%6#%7$        %8$[%1](%9,%0%2[%3])(%5)#%6s#%7,%2$
+#define TIMER_NUM(%0,%1,%2)%8$[%1](%9)(%5)#%6#%7$           %8$[%1](%9,%0%2)(%5)#%6i#%7,%2$
 
 #define TIMER_END(%9)%8$[%2](,%1)(%5)#%6#,%7$ %8$ \
 	stock defer_%9(__rep, %5) return SetTimerEx("timer_"#%9, (%2), __rep, #%6#, %7); \
@@ -1172,16 +1172,118 @@ breaking anything...
 ### Use
 
 ```pawn
-timer my_timer[500](const a, string:b[], c = 5)
+timer my_timer_1[500](const a, string:b[], c = 5)
 {
+
+}
+
+timer my_timer_2[500](const a, string:b[], c = 5)
+{
+
+}
+
+timer my_timer_3[500](const a, string:b[])
+{
+
+}
+
+timer my_timer_4[500](const a, b[], d)
+{
+
+}
+
+timer my_timer_5[500](const a, b[], d = sizeof (b))
+{
+
+}
+
+timer my_timer_6[500](const a, b[], const d, e[], f)
+{
+
 }
 
 main()
 {
-	defer my_timer(34, "hi");
-	repeat my_timer(34, "hi");
+	defer my_timer_1(34, "hi");
+	repeat my_timer_1(34, "hi");
 }
 ```
+
+## LEN:
+
+`CallRemoteFunction`, `SetTimerEx`, and other natives that take variable
+parameters with a specifier string require that arrays passed to them are
+followed by the array length (so that memory can be allocated correctly).  This
+isn't required for strings as their length can be determined by the NULL byte.
+This one fact is the sole reason for the radically different processing of
+strings and arrays (i.e. `a` vs. `s`, and `string:`).
+
+This requirement can be enforced at compile-time by appending `LEN:` to the end
+of the parser definition.  Most other definitions in `FUNC_PARSER` can come in
+any order - the library will determine the best order for them.
+
+**THE `LEN:` SPECIFICATION MUST COME AT THE END.**
+
+```pawn
+#define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
+```
+
+Beyond that, everything else is the same.  Arrays and integers are called back
+as normal individually, but now if an array is not followed by either a number
+(`a`) or a reference (`&a`) the compiler will show `error 017: undefined symbol
+"LENGTH_REQUIRED"` (this was the closest to a useful error that I could get).
+
+This is fine:
+
+```pawn
+#define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
+
+timer length_required(arr[], len)
+{
+}
+```
+
+This is fine:
+
+```pawn
+#define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:)(%0(%1)) [%2]()(%1)##$
+
+timer no_length_required(arr[])
+{
+}
+```
+
+This is not:
+
+```pawn
+#define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
+
+timer length_required(arr[])
+{
+}```
+
+This is fine:
+
+```pawn
+#define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
+
+timer length_required(arr[], len = sizeof (arr))
+{
+}
+```
+
+This is not:
+
+```pawn
+#define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST:LEN:)(%0(%1)) [%2]()(%1)##$
+
+timer length_required(arr[], len = sizeof (arr))
+{
+}
+```
+
+The last one is not allowed because only `NUM_CST` was given, not `NUM_CST_DEF`,
+so default values on numbers are not allowed.
 
 ## API
 
