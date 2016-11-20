@@ -10,7 +10,7 @@
   * [Exclude Strings](#exclude-strings)
 * [Example 2 - Count All Parameters](#example-2---count-all-parameters)
 * [Example 3 - Count Array Parameters And Sum Their Size](#example-3---count-array-parameters-and-sum-their-size)
-* [Example 4 - Auto-Generate `CallRemoteFunction` Specifier Strings](#example-4---auto-generate-`callremotefunction`-specifier-strings)
+* [Example 4 - Auto-Generate `CallRemoteFunction` Specifier Strings](#example-4---auto-generate-callremotefunction-specifier-strings)
   * [Three Facts](#three-facts)
   * [Tags](#tags)
 * [Example 5 - Output Input Exactly](#example-5---output-input-exactly)
