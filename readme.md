@@ -27,7 +27,7 @@
   * [Use](#use-1)
 * [Example 7 - y_timers Clone](#example-7---y_timers-clone)
   * [Use](#use)
-* [LEN:](#len)
+* [LEN](#len)
 * [API](#api)
 
 ## Introduction
