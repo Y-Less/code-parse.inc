@@ -1,5 +1,34 @@
 # code-parse.inc
 
+## Contents
+
+* [Introduction](#introduction)
+* [Example 1 - Count Array Parameters](#example-1---count-array-parameters)
+* [Full Code](#full-code)
+* [Console Output](#console-output)
+* [Explanation](#explanation)
+* [Exclude Strings](#exclude-strings)
+* [Example 2 - Count All Parameters](#example-2---count-all-parameters)
+* [Example 3 - Count Array Parameters And Sum Their Size](#example-3---count-array-parameters-and-sum-their-size)
+* [Example 4 - Auto-Generate `CallRemoteFunction` Specifier Strings](#example-4---auto-generate-`callremotefunction`-specifier-strings)
+* [Three Facts](#three-facts)
+* [Tags](#tags)
+* [Example 5 - Output Input Exactly](#example-5---output-input-exactly)
+* [Lie 1](#lie-1)
+* [Lie 2](#lie-2)
+* [Output One Parameter](#output-one-parameter)
+* [Output Everything](#output-everything)
+* [Example 6 - Remotes With Alternate Return Types](#example-6---remotes-with-alternate-return-types)
+* [No Return](#no-return)
+* [Tag Return](#tag-return)
+* [String Return](#string-return)
+* [String Return Code Issues](#string-return-code-issues)
+* [Complete String Return Code](#complete-string-return-code)
+* [Use](#use-1)
+* [Example 7 - y_timers Clone](#example-7---y_timers-clone)
+* [Use](#use)
+* [API](#api)
+
 ## Introduction
 
 This library is designed for generating code at compile-time based on existing
