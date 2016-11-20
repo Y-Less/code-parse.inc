@@ -939,12 +939,12 @@ flexibility you want to allow - maybe default values can be banned for example.
 ```pawn
 #define remote%0(%1) FUNC_PARSER(REMOTE,ARR_CST:STR_CST_DEF:NUM_CST_DEF:RET_TAG_VOD_STR:)(%0(%1)) ()(%1)##$
 
-#define REMOTE_STR_DEF(%0,%1,%2,%3,%4)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6s#%7,%2$
-#define REMOTE_NUM_DEF(%0,%1,%2,%4)%8$(%9)(%5)#%6#%7$    %8$(%9,%0%2)(%5)#%6i#%7,%2$
+#define REMOTE_STR_DEF(%0,%1,%2,%3,%4)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6s#%7,_:(%2)$
+#define REMOTE_NUM_DEF(%0,%1,%2,%4)%8$(%9)(%5)#%6#%7$    %8$(%9,%0%2)(%5)#%6i#%7,_:(%2)$
 
-#define REMOTE_ARR(%0,%1,%2,%3)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6a#%7,%2$
-#define REMOTE_STR(%0,%1,%2,%3)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6s#%7,%2$
-#define REMOTE_NUM(%0,%1,%2)%8$(%9)(%5)#%6#%7$    %8$(%9,%0%2)(%5)#%6i#%7,%2$
+#define REMOTE_ARR(%0,%1,%2,%3)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6a#%7,_:(%2)$
+#define REMOTE_STR(%0,%1,%2,%3)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6s#%7,_:(%2)$
+#define REMOTE_NUM(%0,%1,%2)%8$(%9)(%5)#%6#%7$    %8$(%9,%0%2)(%5)#%6i#%7,_:(%2)$
 
 #define REMOTE_END(%9)%8$(,%1)(%5)#%6#,%7$ %8$ \
 	stock %9(%5) return CallRemoteFunction("remote_"#%9, #%6#,%7); \
@@ -1012,6 +1012,146 @@ flexibility you want to allow - maybe default values can be banned for example.
 
 #define underlying_%9\32; underlying_%9
 #define remote_%9\32; remote_%9
+```
+
+### Use
+
+```pawn
+remote DB:other_func_1(a, c, b[]);
+
+remote other_func_2(a, c, string:b[]);
+
+remote string:other_func_3(Text:a, c, b[])
+{
+	new ret[32] = "hello";
+	return ret;
+}
+
+remote File:other_func_4(Text:a, c, const b[]);
+
+remote other_func_5(Text:a, c, b[]);
+
+remote void:other_func_6(a, c, const b[6]);
+
+remote other_func_7(a, c, b[]);
+
+remote other_func_8(const a, b[], Float:c);
+
+remote void:other_func_9(const Float:a, c, b[]);
+
+remote other_func_0(const Float:a, c, b[]);
+
+remote string:other_func_a(const Float:a, c, b[])
+{
+	new ret[32] = "implemented";
+	return ret;
+}
+
+remote Float:other_func_b(const a, b[], c = 6);
+
+remote other_func_c(const a, c, b[]);
+
+remote void:other_func_d(const a, c, b[]);
+
+remote other_func(a, c, b[])
+{
+	return 100;
+}
+
+main()
+{
+	new var, Float:flt, str[32];
+    new arr[6] = { 1, 2, 3, 4, 5, 6 };
+	      other_func_1(66, 99, arr);
+	var = other_func_2(66, 99, "hi");
+	str = other_func_3(Text:56, 4, arr);
+	      other_func_4(Text:32, 5, arr);
+	var = other_func_5(Text:9, 6, arr);
+	      other_func_6(5, 7, arr);
+	var = other_func_7(5, 7, arr);
+	var = other_func_8(700, arr, 99.0);
+	      other_func_9(1.1, 11, arr);
+	var = other_func_0(1.2, 12, arr);
+	str = other_func_a(1.3, 13, arr);
+	flt = other_func_b(555, arr);
+	var = other_func_c(6, 9, arr);
+	      other_func_d(6, 9, arr);
+	var = other_func(0, 1, arr);
+}
+```
+
+Note that all of these examples are actually broken - an array passed to
+`CallRemoteFunction` *MUST* be immediately followed by its length, none of these
+ones do that and so won't work.  There are ways to enforce this at compile-time,
+but the library currently doesn't.
+
+## Example 7 - y_timers Clone
+
+This example is actually probably simpler than the last one, but I said I would
+end on it, so I will.
+
+The end result is three macros - `timer`, `defer`, and `repeat`; that in order
+declare a timer with parameters, call it after a delay, and call it repeatedly
+on a loop.  The full version of the library allows for overriding the times at
+the call site as well as the declaration site, but this clone will not.  It is
+also simplified by the fact that timers can't have return values.  The full
+version also fixes arrays, this one again doesn't, but that's not pre-processor
+code.  See Slice's include if you want a simple ready-made independent fix for
+that.
+
+```pawn
+#define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:)(%0(%1)) [%2]()(%1)##$
+
+#define TIMER_STR_DEF(%0,%1,%2,%3,%4)%8$[%1](%9)(%5)#%6#%7$ %8$[%1](%9,%0%2[%3])(%5)#%6s#%7,_:(%2)$
+#define TIMER_NUM_DEF(%0,%1,%2,%4)%8$[%1](%9)(%5)#%6#%7$    %8$[%1](%9,%0%2)(%5)#%6i#%7,_:(%2)$
+#define TIMER_ARR(%0,%1,%2,%3)%8$[%1](%9)(%5)#%6#%7$        %8$[%1](%9,%0%2[%3])(%5)#%6a#%7,_:(%2)$
+#define TIMER_STR(%0,%1,%2,%3)%8$[%1](%9)(%5)#%6#%7$        %8$[%1](%9,%0%2[%3])(%5)#%6s#%7,_:(%2)$
+#define TIMER_NUM(%0,%1,%2)%8$[%1](%9)(%5)#%6#%7$           %8$[%1](%9,%0%2)(%5)#%6i#%7,_:(%2)$
+
+#define TIMER_END(%9)%8$[%2](,%1)(%5)#%6#,%7$ %8$ \
+	stock defer_%9(__rep, %5) return SetTimerEx("timer_"#%9, (%2), __rep, #%6#, %7); \
+	forward timer_%9(%1); \
+	public timer_%9(%1)
+
+#define TIMER_NUL(%9)%8$[%2]()()##$ %8$ \
+	stock defer_%9(__rep) return SetTimer("timer_"#%9, (%2), __rep); \
+	forward timer_%9(); \
+	public timer_%9()
+
+#define timer_%9\32; timer_%9
+#define defer_%9\32; defer_%9
+
+#define _:%0,) _:%0)
+#define defer%0(%1) defer_%0(_:0,%1)
+#define repeat%0(%1) defer_%0(_:1,%1)
+```
+
+One tiny new macro to draw your attention to:
+
+```pawn
+#define _:%0,) _:%0)
+```
+
+This consumes a trailing comma after the last parameter in a list.  It cannot be
+used everywhere, since you can't always know the true tag to use, but is useful
+in cases like this where you can control the tag, and know that there may not be
+any more parameters.  Despite seemingly overriding the default `_:` tag, it only
+matches in very specific (otherwise invalid) cases so it doesn't break anything.
+YSI has had this macro for years, and no-one has complained yet about it
+breaking anything...
+
+### Use
+
+```pawn
+timer my_timer[500](const a, string:b[], c = 5)
+{
+}
+
+main()
+{
+	defer my_timer(34, "hi");
+	repeat my_timer(34, "hi");
+}
 ```
 
 ## API
