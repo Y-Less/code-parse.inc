@@ -83,26 +83,26 @@ a good understanding of the pre-processor helps as well).
 
 This is the code input (input):
 
-```
+```pawn
 my_test_function(a, b[], c, const d[], &e = 6, string:f[] = "hi")
 ```
 
 This is the code output (output):
 
-```
+```pawn
 stock const countOf_my_test_function = 0 + 1 + 1 + 1;
 my_test_function(a, b[], c, const d[], &e = 6, string:f[] = "hi")
 ```
 
 The bit of the output we really care about is just the first part:
 
-```
+```pawn
 stock const countOf_my_test_function = 0 + 1 + 1 + 1;
 ```
 
 This starts out as:
 
-```
+```pawn
 stock const countOf_my_test_function = 0;
 ```
 
@@ -836,7 +836,7 @@ my_func(a, b[], c)#iai#, a, b, c$
 Not valid code, but has all the components required to generate the full code.
 The basic version is simple, and now happens in the end macro instead:
 
-```
+```pawn
 #define REMOTE_END(%9)%8$%0(%1)#%6#,%7$ %8$ \
 	stock %0(%1) return CallRemoteFunction("remote_"#%0, #%6#,%7); \
 	forward remote_%0(%1); \
@@ -850,7 +850,7 @@ The basic version is simple, and now happens in the end macro instead:
 
 Void returns are also simple (and almost identical):
 
-```
+```pawn
 #define REMOTE_END_VOD(%9)%8$%0(%1)#%6#,%7$ %8$ \
 	stock %0(%1) CallRemoteFunction("remote_"#%0, #%6#,%7); \
 	forward remote_%0(%1); \
@@ -884,7 +884,7 @@ list.  In that case the `_NUL` variants become identical to the `_END` variants:
 Where this is not the case is in the `underlying_` parameter list in the string
 return variant (`_STR`).  Detection of the leading comma is required then:
 
-```
+```pawn
 #define REMOTE_END_STR(%9)%8$%0(%1)#%6#,%7$ %8$ \
 	stock %0(%1)                                    \
 	{                                               \
@@ -1232,5 +1232,6 @@ your own input to the magical `__:` macro:
 #define m@:n@:%0(%5)(%4|||%6|||%7,%8)%3$ %0.m@:n@:%0(%5)(%4%6|||%7|||%8)%3$
 ```
 
-But don't be upset if the underlying macros change...
+But don't be upset if the underlying macros change (since they have even since I
+copied them here).
 
