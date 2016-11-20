@@ -27,8 +27,10 @@
   * [Use](#use-1)
 * [Example 7 - y_timers Clone](#example-7---y_timers-clone)
   * [Use](#use)
-* [LEN](#len)
+* [LEN (LENGTH)](#len)
+* [QAL (QUALIFICATION)](#qal)
 * [API](#api)
+* [y_inline](#y_inline)
 
 ## Introduction
 
@@ -1210,7 +1212,7 @@ main()
 }
 ```
 
-## LEN:
+## LEN (LENGTH)
 
 `CallRemoteFunction`, `SetTimerEx`, and other natives that take variable
 parameters with a specifier string require that arrays passed to them are
@@ -1239,7 +1241,7 @@ This is fine:
 ```pawn
 #define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
 
-timer length_required(arr[], len)
+timer length_required[100](arr[], len)
 {
 }
 ```
@@ -1249,7 +1251,7 @@ This is fine:
 ```pawn
 #define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:)(%0(%1)) [%2]()(%1)##$
 
-timer no_length_required(arr[])
+timer no_length_required[200](arr[])
 {
 }
 ```
@@ -1259,7 +1261,7 @@ This is not:
 ```pawn
 #define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
 
-timer length_required(arr[])
+timer length_required[100](arr[])
 {
 }
 ```
@@ -1269,7 +1271,7 @@ This is fine:
 ```pawn
 #define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
 
-timer length_required(arr[], len = sizeof (arr))
+timer length_required[200](arr[], len = sizeof (arr))
 {
 }
 ```
@@ -1279,7 +1281,7 @@ This is not:
 ```pawn
 #define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:LEN:NUM_CST_DEF:)(%0(%1)) [%2]()(%1)##$
 
-timer length_required(arr[], len = sizeof (arr))
+timer length_required[100](arr[], len = sizeof (arr))
 {
 }
 ```
@@ -1289,7 +1291,7 @@ This is not:
 ```pawn
 #define timer%0[%2](%1) FUNC_PARSER(TIMER,ARR_CST:STR_CST_DEF:NUM_CST:LEN:)(%0(%1)) [%2]()(%1)##$
 
-timer length_required(arr[], len = sizeof (arr))
+timer length_required[200](arr[], len = sizeof (arr))
 {
 }
 ```
@@ -1297,6 +1299,46 @@ timer length_required(arr[], len = sizeof (arr))
 The last one is not allowed because only `NUM_CST` was given, not `NUM_CST_DEF`,
 so default values on numbers are not allowed.  The penultimate one has `LEN:` in
 the wrong place - this might work slightly, but not fully.
+
+## QAL (QUALIFICATION)
+
+Function qualifiers are the bits that come before the name, i.e. `stock`,
+`static`, `forward`, and `public`.  If you are using YSI, this extends to
+include `const`, `global`, `foreign`, `timer`, `ptask`, `task`, `remoterunc`,
+`hook`, `inline`, `group_hook`, `master_hook`, `master_task`, `master_ptask`,
+`master_func`, `@foreign`, `@global`, `timerfunc`, and `loadtext`.  That last
+one is only valid on variables, `const` and `inline` are only used on inline
+functions, and several of these are uncommon synonyms or alternate (backup)
+spellings.
+
+The point is, keywords can be used before functions, and can be detected when
+using the `QAL:` modifier.  The keywords are only detected if they come after
+the main entry macro:
+
+```pawn
+#define timer%0[%2](%1) FUNC_PARSER(TIMER,QAL:ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
+
+#define TIMER_stock()%8$ %8$ // Saw "stock"
+```
+
+Will be detected:
+
+```pawn
+timer stock my_timer[100]()
+{
+}
+```
+
+Will not be detected:
+
+```pawn
+stock timer my_timer[200]()
+{
+}
+```
+
+The `PREFIX_keyword` macro is called after all the parameters have been
+processed, but before the ending macros are called (`_END`, `_NUL`, etc.)
 
 ## API
 
@@ -1349,4 +1391,76 @@ your own input to the magical `__:` macro:
 
 But don't be upset if the underlying macros change (since they have even since I
 copied them here).
+
+## y_inline
+
+This entire library is designed for parsing function declarations.  These appear
+at the global scope - with one exception: y_inline (or any other inline library
+that someone cares to write).  The `__` macro on which the tag-based parsing
+works only works at the top level (I tried very hard to make it work everywhere,
+but it just didn't QUITE happen).
+
+y_inline converts this:
+
+```pawn
+main()
+{
+	inline InlineFunc(a, b[32], string:c[])
+	{
+		// Code.
+	}
+}
+```
+
+In to:
+
+```pawn
+main()
+{
+	static  InlineFunc_1[_:I@E:32]=# InlineFunc_1":....";if(I@E(_:@Ia:@Ib:@Ic:@Ib:@Ic:@Id: InlineFunc_1))for(new a, b[_:@Iy:32], c[_:(130)];I@F();)while(I@L(I@K(1),0,@Ix,sizeof  c))
+	{
+		// Code.
+	}
+}
+```
+
+Representing:
+
+```pawn
+main()
+{
+	static
+		InlineFunc_1[32] = "InlineFunc_1:....";
+	if (Inline_Entry(InlineFunc_1))
+	{
+		for (new a, b[32], c[130]; Inline_Allocator(); )
+		{
+			while (Inline_Main(Inline_Count(1), 0, cellmax, sizeof (c)))
+			{
+				// Code.
+			}
+		}
+	}
+}
+```
+
+This is rewritten at runtime to something equivalent to:
+
+```pawn
+main()
+{
+	goto after;
+	static InlineFunc = Inline_Start("InlineFunc", "ia[10]s", &start);
+	new a, b[10], string:c[];
+	{
+start:
+	}
+after:
+}
+```
+
+The run-time implementation of y_inline is not the focus of this example though,
+only the macros.
+
+***TODO***.
 

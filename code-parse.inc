@@ -36,7 +36,7 @@
 // by a custom macro name prefix for the user code, followed by the parameters
 // to parse.  We always have "o@:" on the end to detect remaining parameters
 // (this will detect any type not covered by others).
-#define FUNC_PARSER(%0,%1)(%3(%4)) PARSE@%1(,,,,,o@:x@[])(%0)%3(%4,)
+#define FUNC_PARSER(%0,%1)(%3(%4)) PARSE@%1(p@--,,,,,o@:x@[])(%0)%3(%4,)
 
 // Modifiers for parameter types.  These detect optional extra bits such as
 // "const" and tags.
@@ -82,16 +82,31 @@
 #define z@:%0[%9]%0(%5)%3(|||,%7) %9%5_NUL(%3)%7
 
 // Detect out of parameters.
-#define n@[%9]%0(%5)%3(%6|||%7) %9%5_END(%3)%7
+#define n@[%9]%0(%5)%3(%6|||%7) %9%5_END(%3)n@DROP[%5]%7
+#define n@DROP[%5]
 
 // Not none, thus many parameters.  Used to recurse through multiple parameters.
 #define m@:n@[%9]%0(%5)%3(%6|||%7,%8) %0.m@:n@[%9]%0(%5)%3(%7|||%8)
 
 // Detect possible return types.
-#define g@:%9-%5(%9void:%3) %5_VOD(%3)
-#define k@:%9-%5(%9string:%3) %5_STR(%3)
-#define l@:%9-%5(%9:%3) %5_TAG(%9:,%3)
-#define p@-
+#define g@:%9-%6-%5(%9void:%3) %6%5_VOD(%3)
+#define k@:%9-%6-%5(%9string:%3) %6%5_STR(%3)
+#define l@:%9-%6-%5(%9:%3) %6PARSE_WILL_BE(%9)%5_TAG<:,%3>
+#define p@-%6-%5(%3) %6%5(%3)
+#define PARSE_WILL_BE(%9)%5<%3> %5(%9%3)
+
+// Detect possible function modifiers
+#define e@[%5]
+#define statice@[%5] %5_static()
+#define stocke@[%5] %5_stock()
+#define publice@[%5] %5_public()
+#define conste@[%5] %5_const()
+#define forwarde@[%5] %5_forward()
+#define s@:h@:i@(%0\32;[%5](%8)) %8(%0)
+#define h@:i@(%0\32;%2[%5](%8)) %0e@[%5]s@:h@:i@(%2[%5](%8))
+#define i@(%0[%5](%8)) %8(%0)
+#define y@:%8(%1)%2[%5] s@:h@:i@(%1[%5](%8))%2[%5]
+// #define y@:%0(%1)%2[%5]  WAS(%0_(%1)%2_[%5]) // %0(%1)%2(%5)
 
 // We need the macros in a very specific order, because some will match others
 // as well.  For example, arrays will match strings but not vice-versa, so we
@@ -114,21 +129,24 @@
 #define PARSE@(%9,%0,%1,%2,%3,%4)(%5)%6(%7) __:z@:m@:n@[%9]%0%1%2%3%4(%5)%6(|||%7)$
 
 // Return types.
-#define PARSE@RET_VOD:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(g@:p@-,%0,%1,%2,%3,%4)       // void:
-#define PARSE@RET_VOD_STR:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // void: string:
+#define PARSE@RET_VOD:%8(%9-%7-,%0,%1,%2,%3,%4)         PARSE@%8(g@:p@-%7-,%0,%1,%2,%3,%4)       // void:
+#define PARSE@RET_VOD_STR:%8(%9-%7-,%0,%1,%2,%3,%4)     PARSE@%8(g@:k@:p@-%7-,%0,%1,%2,%3,%4)    // void: string:
 #define PARSE@RET_STR_VOD                       PARSE@RET_VOD_STR
-#define PARSE@RET_VOD_TAG:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // void: ???:
+#define PARSE@RET_VOD_TAG:%8(%9-%7-,%0,%1,%2,%3,%4)     PARSE@%8(g@:l@:p@-%7-,%0,%1,%2,%3,%4)    // void: ???:
 #define PARSE@RET_TAG_VOD                       PARSE@RET_VOD_TAG
-#define PARSE@RET_VOD_STR_TAG:%8(%9,%0,%1,%2,%3,%4) PARSE@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // void: string: ???:
+#define PARSE@RET_VOD_STR_TAG:%8(%9-%7-,%0,%1,%2,%3,%4) PARSE@%8(g@:k@:l@:p@-%7-,%0,%1,%2,%3,%4) // void: string: ???:
 #define PARSE@RET_STR_VOD_TAG                   PARSE@RET_VOD_STR_TAG
 #define PARSE@RET_VOD_TAG_STR                   PARSE@RET_VOD_STR_TAG
 #define PARSE@RET_STR_TAG_VOD                   PARSE@RET_VOD_STR_TAG
 #define PARSE@RET_TAG_VOD_STR                   PARSE@RET_VOD_STR_TAG
 #define PARSE@RET_TAG_STR_VOD                   PARSE@RET_VOD_STR_TAG
-#define PARSE@RET_TAG:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(l@:p@-,%0,%1,%2,%3,%4)       // ???:
-#define PARSE@RET_STR:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(k@:p@-,%0,%1,%2,%3,%4)       // string:
-#define PARSE@RET_STR_TAG:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string: ???:
+#define PARSE@RET_TAG:%8(%9-%7-,%0,%1,%2,%3,%4)         PARSE@%8(l@:p@-%7-,%0,%1,%2,%3,%4)       // ???:
+#define PARSE@RET_STR:%8(%9-%7-,%0,%1,%2,%3,%4)         PARSE@%8(k@:p@-%7-,%0,%1,%2,%3,%4)       // string:
+#define PARSE@RET_STR_TAG:%8(%9-%7-,%0,%1,%2,%3,%4)     PARSE@%8(k@:l@:p@-%7-,%0,%1,%2,%3,%4)    // string: ???:
 #define PARSE@RET_TAG_STR                       PARSE@RET_STR_TAG
+
+#define PARSE@QAL:%8(%9-%7-,%0,%1,%2,%3,%4) PARSE@%8(%9-y@:-,%0,%1,%2,%3,%4)       // stock, const, etc.
+#define PARSE@QUALIFIERS PARSE@QAL
 
 #define PARSE@RET_VOID            PARSE@RET_VOD
 #define PARSE@RET_VOID_STRING     PARSE@RET_VOD_STR
