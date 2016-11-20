@@ -109,7 +109,7 @@ important).
 
 **DO NOT PUT ANY SPACES IN THIS PART!**
 
-`ARR:` will detect any array.  `NUM:` is essentially "other" - it will detect
+`ARR:` will detect any array.  `NUM:` is essentially *other* - it will detect
 anything not detected by any other parser.  There is also `EXT:` (extended)
 which will detect `...`, `REF:` (reference) which will detect `&a`, and `STR:`
 (string) which will detect `string:a[]`.  This last point is important - because
@@ -526,7 +526,7 @@ Name | Use
 --- | ---
 TAG | Look for tags.
 MUL | Allow multi-dimensional arrays (more than one dimension).
-CST | Look for "const".
+CST | Look for `const `.
 DEF | Look for defaults.
 
 The earlier parsers shown didn't use any of these, as often they weren't needed
@@ -543,7 +543,7 @@ There are also longer synonyms if you prefer clarity:
 FUNC_PARSER(REBUILD,ARRAY_TAG_CONST_MULTI:NUMBER_CONST_TAG_DEFAULT:TAG_REFERENCE_DEFAULT:TAG_VARARG:DEFAULT_STRING_CONST:)(input)
 ```
 
-Clearly, the order of parts doesn't matter - "ARR_MUL_CST" and "CST_MUL_ARR" are
+Clearly, the order of parts doesn't matter - `ARR_MUL_CST` and `CST_MUL_ARR` are
 the same.
 
 ### Output One Parameter
@@ -616,12 +616,403 @@ dollar.  They remove those match artifacts.
 
 ## Example 6 - Remotes With Alternate Return Types
 
+A reminder of the current `remote` macro:
+
+```pawn
+#define remote%0(%1) FUNC_PARSER(REMOTE,ARR:STR:NUM:)(%0(%1)) \
+	stock %0(%1) CallRemoteFunction("remote_"#%0, ##); \
+	forward remote_%0(%1); \
+	public remote_%0(%1)
+
+#define remote_%0\32; remote_%0
+
+#define REMOTE_ARR(%9,%9,%2,%9)%8$%0(%1)%3(%4#%5#%6#%7) %8$%0(%1)%3(%4#%5#%6a#%7,%2)
+#define REMOTE_STR(%9,%9,%2,%9)%8$%0(%1)%3(%4#%5#%6#%7) %8$%0(%1)%3(%4#%5#%6s#%7,%2)
+#define REMOTE_NUM(%9,%9,%2)%8$%0(%1)%3(%4#%5#%6#%7)    %8$%0(%1)%3(%4#%5#%6i#%7,%2)
+
+#define REMOTE_END(%9)%8$ %8$
+#define REMOTE_NUL(%9)%8$ %8$
+```
+
+Modifying this to return a value is apparently simple:
+
+```pawn
+#define remote%0(%1) FUNC_PARSER(REMOTE,ARR:STR:NUM:)(%0(%1)) \
+	stock %0(%1) return CallRemoteFunction("remote_"#%0, ##); \
+	forward remote_%0(%1); \
+	public remote_%0(%1)
+```
+
+But optionally returning a value not so much.
+
 ### No Return
 
-In this library and others (YSI) "no return" uses the C naming of `void` when
+In this library and others (YSI) *no return* uses the C naming of `void:` when
 the code from returns and no returns is different.
 
+Adding a return value was simple, but it may not always be wanted if the
+underlying function doesn't return a value.  This is where `void:` comes in.
+`void:` is similar to `string:` in that it is not a real tag, just a macro to
+provide hints to parsers on what code to generate.  It is removed from the final
+code (not that this would make any difference - you can't get a tag mismatch
+warning when you don't return anything at all - that's an error regardless of
+the tag).
 
+We can request parsing of return types in the same way as parameters (`RET` = 
+`RETURN`, `VOD` = `VOID`):
+
+```pawn
+FUNC_PARSER(REMOTE,ARR:STR:NUM:RET_VOD:)
+```
+
+If no special return type is found, it is assumed to be a normal return, and
+this fact is passed to the end macros, where we can insert the `return`:
+
+```pawn
+#define REMOTE_END(%9)%8$%0(%1) %8$%0(%1)return
+#define REMOTE_NUL(%9)%8$%0(%1) %8$%0(%1)return
+```
+
+To ensure a space is inserted between `return` and `CallRemoteFunction`, more
+matching is required (trailing spaces on the replacement value are simply
+ignored):
+
+```pawn
+#define REMOTE_END(%9)%8$%0(%1)%2(%3) %8$%0(%1)return %2(%3)
+#define REMOTE_NUL(%9)%8$%0(%1)%2(%3) %8$%0(%1)return %2(%3)
+```
+
+Since we have requested detection of `void:`, handle that case as well:
+
+```pawn
+#define REMOTE_END_VOD(%9)%8$ %8$
+#define REMOTE_NUL_VOD(%9)%8$ %8$
+```
+
+There is no `return` by default, so if one isn't needed there is nothing to do.
+
+### Tag Return
+
+A tag return is passed as an extra macro parameter.
+
+```pawn
+FUNC_PARSER(REMOTE,ARR:STR:NUM:RET_TAG:)
+#define REMOTE_END_TAG(%7,%9)%8$%0(%1)%2(%3) %8$%0(%1)return %7:%2(%3)
+```
+
+There is no much to say about these - for the most part tags aren't actually
+that interesting from a code generation point of view since they behave the same
+as tagless returns, and in almost all code location `tag:func()` is just as
+valid as `func()`, so there's no point detecting them.
+
+Detecting either return variation would look like:
+
+```pawn
+FUNC_PARSER(REMOTE,ARR:STR:NUM:RET_TAG_VOD:)
+
+#define REMOTE_END_TAG(%7,%9)%8$%0(%1)%2(%3) %8$%0(%1)return %7:%2(%3)
+#define REMOTE_END(%9)%8$%0(%1)%2(%3) %8$%0(%1)return %2(%3)
+#define REMOTE_END_VOD(%9)%8$ %8$
+
+#define REMOTE_NUL_TAG(%7,%9)%8$%0(%1)%2(%3) %8$%0(%1)return %7:%2(%3)
+#define REMOTE_NUL(%9)%8$%0(%1)%2(%3) %8$%0(%1)return %2(%3)
+#define REMOTE_NUL_VOD(%9)%8$ %8$
+```
+
+### String Return
+
+At a basic level, string returns are handled the same as other return types:
+
+```pawn
+FUNC_PARSER(REMOTE,ARR:STR:NUM:RET_STR:)
+
+#define REMOTE_END_STR(%9)%8$%0(%1)%2(%3) %8$%0(%1)return %2(%3)
+#define REMOTE_END(%9)%8$%0(%1)%2(%3) %8$%0(%1)return %2(%3)
+```
+
+That's the generic version, but `CallRemoteFunction` can't return a string, so
+for this example some serious restructuring is required to enable it.  If the
+underlying function has a string return, the public function should wrap that in
+something else, like a property, and the called function should return that
+property's contents.  There are several other considerations and corner cases
+for a full version of this code, but they aren't important here.  The output of
+a regular return should look like:
+
+```pawn
+stock my_func(a, b[], c)
+{
+	return CallRemoteFunction("remote_my_func", "iai", a, b, c);
+}
+
+forward remote_my_func(a, b[], c);
+public remote_my_func(a, b[], c)
+{
+	return 1;
+}
+```
+
+While the output of a string return should be quite structurally different:
+
+```pawn
+stock my_func(a, b[], c)
+{
+	new ret[32];
+	CallRemoteFunction("remote_my_func", "iai", a, b, c);
+	getproperty(0, "", 101, ret);
+	return ret;
+}
+
+forward remote_my_func(a, b[], c);
+public remote_my_func(a, b[], c)
+{
+	setproperty(0, "", 101, underlying_my_func(a, b, c));
+}
+
+static underlying_my_func(a, b[], c)
+{
+	// Can't return string literals in this design, even with the new compiler.
+	new ret[32] = "hi";
+	return ret;
+}
+```
+
+There are three parameter-dependent parts of this code: the input parameters
+`a, b[], c`, the call parameters `a, b, c`, and the specifier `iai`, each used
+in potentially many places.  Creating the full code structure from the start as
+done before is non trivial, instead I like to collate all the data THEN build
+the structure:
+
+```pawn
+#define remote%0(%1) FUNC_PARSER(REMOTE,ARR:STR:NUM:RET_TAG_VOD_STR:)(%0(%1)) %0(%1)##$
+#define remote_%0\32; remote_%0
+```
+
+The output here is very simply `%0(%1)##$` - this is just our structure in to
+which all the individual components will be placed for later processing.  To
+insert the parameters looks like:
+
+```pawn
+#define REMOTE_ARR(%9,%9,%2,%9)%8$%0(%1)#%6#%7$ %8$%0(%1)#%6a#%7,%2$
+#define REMOTE_STR(%9,%9,%2,%9)%8$%0(%1)#%6#%7$ %8$%0(%1)#%6s#%7,%2$
+#define REMOTE_NUM(%9,%9,%2)%8$%0(%1)#%6#%7$    %8$%0(%1)#%6i#%7,%2$
+```
+
+After the processing of the `my_func(a, b[], c)` example, this will have
+produced:
+
+```pawn
+my_func(a, b[], c)#iai#, a, b, c$
+```
+
+Not valid code, but has all the components required to generate the full code.
+The basic version is simple, and now happens in the end macro instead:
+
+```
+#define REMOTE_END(%9)%8$%0(%1)#%6#,%7$ %8$ \
+	stock %0(%1) return CallRemoteFunction("remote_"#%0, #%6#,%7); \
+	forward remote_%0(%1); \
+	public remote_%0(%1)
+
+#define REMOTE_NUL(%9)%8$%0(%1)##$ %8$ \
+	stock %0(%1) return CallRemoteFunction("remote_"#%0, ##); \
+	forward remote_%0(%1); \
+	public remote_%0(%1)
+```
+
+Void returns are also simple (and almost identical):
+
+```
+#define REMOTE_END_VOD(%9)%8$%0(%1)#%6#,%7$ %8$ \
+	stock %0(%1) CallRemoteFunction("remote_"#%0, #%6#,%7); \
+	forward remote_%0(%1); \
+	public remote_%0(%1)
+
+#define REMOTE_NUL_VOD(%9)%8$%0(%1)##$ %8$ \
+	stock %0(%1) CallRemoteFunction("remote_"#%0, ##); \
+	forward remote_%0(%1); \
+	public remote_%0(%1)
+```
+
+`,%7` could be written in all places above as `%7` - there is a leading comma
+from the processing, but it is required in the `CallRemoteFunction` parameter
+list.  In that case the `_NUL` variants become identical to the `_END` variants:
+
+```pawn
+#define REMOTE_END(%9)%8$%0(%1)#%6#%7$ %8$ \
+	stock %0(%1) return CallRemoteFunction("remote_"#%0, #%6#%7); \
+	forward remote_%0(%1); \
+	public remote_%0(%1)
+
+#define REMOTE_END_VOD(%9)%8$%0(%1)#%6#%7$ %8$ \
+	stock %0(%1) CallRemoteFunction("remote_"#%0, #%6#%7); \
+	forward remote_%0(%1); \
+	public remote_%0(%1)
+
+#define REMOTE_NUL REMOTE_END
+#define REMOTE_NUL_VOD REMOTE_END_VOD
+```
+
+Where this is not the case is in the `underlying_` parameter list in the string
+return variant (`_STR`).  Detection of the leading comma is required then:
+
+```
+#define REMOTE_END_STR(%9)%8$%0(%1)#%6#,%7$ %8$ \
+	stock %0(%1)                                    \
+	{                                               \
+		new ret[32] = "";                           \
+		CallRemoteFunction("remote_"#%0, #%6#,%7);  \
+		getproperty(0, "", 101, ret);               \
+		return ret;                                 \
+	}                                               \
+	                                                \
+	forward remote_%0(%1);                          \
+	public remote_%0(%1)                            \
+	{                                               \
+		setproperty(0, "", 101, underlying_%0(%7)); \
+	}                                               \
+	                                                \
+	stock underlying_%0(%1)
+
+#define REMOTE_NUL_STR(%9)%8$%0(%1)##$ %8$ \
+	stock %0()                                    \
+	{                                             \
+		new ret[32] = "";                         \
+		CallRemoteFunction("remote_"#%0, #%6#);   \
+		getproperty(0, "", 101, ret);             \
+		return ret;                               \
+	}                                             \
+	                                              \
+	forward remote_%0();                          \
+	public remote_%0()                            \
+	{                                             \
+		setproperty(0, "", 101, underlying_%0()); \
+	}                                             \
+	                                              \
+	static underlying_%0()
+
+#define underlying_%0\32; underlying_%0
+```
+
+### String Return Code Issues
+
+The above code was spread out, and actually wrong.  This:
+
+```pawn
+#define underlying_%0\32; underlying_%0
+```
+
+Will output:
+
+```pawn
+underlying_string:my_func()
+```
+
+Because we are using the original function name given to the parser, not the
+parsed name.
+
+Combinations of `const ` and defaults (parameter tags can be ignored) are not
+well handled.  The `public` function should keep `const `, but drop defaults;
+the `CallRemoteFunction` call should drop both parts, so we actually need to
+track three variations of the parameters:
+
+```pawn
+(a, const b[], c = 11)
+(a, const b[], c)
+(a, b, c)
+```
+
+Most `remote` declarations can also act as their own `forward`:
+
+```pawn
+remote void:other_func_6(a, c, const b[6]);
+```
+
+`string:` ones cannot, as the final function is the `underlying_` one, which is
+actually called from the `remote_` public, but will not be implemented.
+
+The full code to fix these issues (except the `string:` forwarding) is below.
+It is already a lot more complex, but with any parser you must assess how much
+flexibility you want to allow - maybe default values can be banned for example.
+
+### Complete String Return Code
+
+```pawn
+#define remote%0(%1) FUNC_PARSER(REMOTE,ARR_CST:STR_CST_DEF:NUM_CST_DEF:RET_TAG_VOD_STR:)(%0(%1)) ()(%1)##$
+
+#define REMOTE_STR_DEF(%0,%1,%2,%3,%4)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6s#%7,%2$
+#define REMOTE_NUM_DEF(%0,%1,%2,%4)%8$(%9)(%5)#%6#%7$    %8$(%9,%0%2)(%5)#%6i#%7,%2$
+
+#define REMOTE_ARR(%0,%1,%2,%3)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6a#%7,%2$
+#define REMOTE_STR(%0,%1,%2,%3)%8$(%9)(%5)#%6#%7$ %8$(%9,%0%2[%3])(%5)#%6s#%7,%2$
+#define REMOTE_NUM(%0,%1,%2)%8$(%9)(%5)#%6#%7$    %8$(%9,%0%2)(%5)#%6i#%7,%2$
+
+#define REMOTE_END(%9)%8$(,%1)(%5)#%6#,%7$ %8$ \
+	stock %9(%5) return CallRemoteFunction("remote_"#%9, #%6#,%7); \
+	forward remote_%9(%1); \
+	public remote_%9(%1)
+
+#define REMOTE_END_VOD(%9)%8$(,%1)(%5)#%6#,%7$ %8$ \
+	stock %9(%5) CallRemoteFunction("remote_"#%9, #%6#,%7); \
+	forward remote_%9(%1); \
+	public remote_%9(%1)
+
+#define REMOTE_END_TAG(%3,%9)%8$(,%1)(%5)#%6#,%7$ %8$ \
+	stock %3%9(%5) return %3CallRemoteFunction("remote_"#%9, #%6#,%7); \
+	forward %3remote_%9(%1); \
+	public %3remote_%9(%1)
+
+#define REMOTE_NUL(%9)%8$()()##$ %8$ \
+	stock %9() return CallRemoteFunction("remote_"#%9, ##); \
+	forward remote_%9(); \
+	public remote_%9()
+
+#define REMOTE_NUL_VOD(%9)%8$()()##$ %8$ \
+	stock %9() CallRemoteFunction("remote_"#%9, ##); \
+	forward remote_%9(); \
+	public remote_%9()
+
+#define REMOTE_NUL_TAG(%3,%9)%8$()()##$ %8$ \
+	stock %3%9() return %3CallRemoteFunction("remote_"#%9, ##); \
+	forward %3remote_%9(); \
+	public %3remote_%9()
+
+#define REMOTE_END_STR(%9)%8$(,%1)(%5)#%6#,%7$ %8$  \
+	stock %9(%5)                                    \
+	{                                               \
+		new ret[32] = "";                           \
+		CallRemoteFunction("remote_"#%9, #%6#,%7);  \
+		getproperty(0, "", 101, ret);               \
+		return ret;                                 \
+	}                                               \
+	                                                \
+	forward remote_%9(%1);                          \
+	public remote_%9(%1)                            \
+	{                                               \
+		setproperty(0, "", 101, underlying_%9(%7)); \
+	}                                               \
+	                                                \
+	stock underlying_%9(%1)
+
+#define REMOTE_NUL_STR(%9)%8$()()##$ %8$            \
+	stock %9()                                      \
+	{                                               \
+		new ret[32] = "";                           \
+		CallRemoteFunction("remote_"#%9, #%6#);     \
+		getproperty(0, "", 101, ret);               \
+		return ret;                                 \
+	}                                               \
+	                                                \
+	forward remote_%9();                            \
+	public remote_%9()                              \
+	{                                               \
+		setproperty(0, "", 101, underlying_%9());   \
+	}                                               \
+	                                                \
+	static underlying_%9()
+
+#define underlying_%9\32; underlying_%9
+#define remote_%9\32; remote_%9
+```
 
 ## API
 
@@ -629,7 +1020,7 @@ The `FUNC_PARSER` macro is the main API entry-point, and generates the macros to
 do the parsing.  The reason it is done this way is that things like
 `TAG_NUM_DEFAULT:` are pretty descriptive tags - that (relatively) clearly
 indicates that you want the parser to detect numbers (regular variables, but
-`VAR` could be confused for both "variable" and "vararg", hence it is avoided).
+`VAR` could be confused for both *variable* and *vararg*, hence it is avoided).
 However, that tag is very long, this tag-macro based parsing method leaves a lot
 of unmatched macros behind, and it is recursive.  Long macros with short line-
 length limits do not play well together.

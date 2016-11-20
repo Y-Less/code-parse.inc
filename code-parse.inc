@@ -11,6 +11,7 @@
 
 // Remove this tag from any final output after all other parsing is done.
 #define string:
+#define void:
 
 // A very generic entry point.  This can be used by any other system to put
 // arbitrary macros at the top level of the file without compiler errors.
@@ -100,37 +101,37 @@
 #define h@(%9,%0,%1,%2,%3,%4)(%5)%6(%7) __:z@:m@:n@<%9>:%0%1%2%3%4(%5)%6(||||||%7)$
 
 // Return types.
-#define h@END_VOD:%8(%9,%0,%1,%2,%3,%4)         h@%8(g@:p@-,%0,%1,%2,%3,%4)       // void:
-#define h@END_VOD_STR:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // void: string:
-#define h@END_STR_VOD:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // 
-#define h@END_VOD_TAG:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // void: ???:
-#define h@END_TAG_VOD:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // 
-#define h@END_VOD_STR_TAG:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // void: string: ???:
-#define h@END_STR_VOD_TAG:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
-#define h@END_VOD_TAG_STR:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
-#define h@END_STR_TAG_VOD:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
-#define h@END_TAG_VOD_STR:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
-#define h@END_TAG_STR_VOD:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
-#define h@END_TAG:%8(%9,%0,%1,%2,%3,%4)         h@%8(l@:p@-,%0,%1,%2,%3,%4)       // ???:
-#define h@END_STR:%8(%9,%0,%1,%2,%3,%4)         h@%8(k@:p@-,%0,%1,%2,%3,%4)       // string:
-#define h@END_STR_TAG:%8(%9,%0,%1,%2,%3,%4)     h@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string:
-#define h@END_TAG_STR:%8(%9,%0,%1,%2,%3,%4)     h@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string: ???:
+#define h@RET_VOD:%8(%9,%0,%1,%2,%3,%4)         h@%8(g@:p@-,%0,%1,%2,%3,%4)       // void:
+#define h@RET_VOD_STR:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // void: string:
+#define h@RET_STR_VOD:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // 
+#define h@RET_VOD_TAG:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // void: ???:
+#define h@RET_TAG_VOD:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // 
+#define h@RET_VOD_STR_TAG:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // void: string: ???:
+#define h@RET_STR_VOD_TAG:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
+#define h@RET_VOD_TAG_STR:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
+#define h@RET_STR_TAG_VOD:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
+#define h@RET_TAG_VOD_STR:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
+#define h@RET_TAG_STR_VOD:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
+#define h@RET_TAG:%8(%9,%0,%1,%2,%3,%4)         h@%8(l@:p@-,%0,%1,%2,%3,%4)       // ???:
+#define h@RET_STR:%8(%9,%0,%1,%2,%3,%4)         h@%8(k@:p@-,%0,%1,%2,%3,%4)       // string:
+#define h@RET_STR_TAG:%8(%9,%0,%1,%2,%3,%4)     h@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string:
+#define h@RET_TAG_STR:%8(%9,%0,%1,%2,%3,%4)     h@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string: ???:
 
-#define h@END_VOID:%8(%9,%0,%1,%2,%3,%4)            h@%8(g@:p@-,%0,%1,%2,%3,%4)       // void:
-#define h@END_VOID_STRING:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // void: string:
-#define h@END_STRING_VOID:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // 
-#define h@END_VOID_TAG:%8(%9,%0,%1,%2,%3,%4)        h@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // void: ???:
-#define h@END_TAG_VOID:%8(%9,%0,%1,%2,%3,%4)        h@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // 
-#define h@END_VOID_STRING_TAG:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // void: string: ???:
-#define h@END_STRING_VOID_TAG:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
-#define h@END_VOID_TAG_STRING:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
-#define h@END_STRING_TAG_VOID:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
-#define h@END_TAG_VOID_STRING:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
-#define h@END_TAG_STRING_VOID:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
-#define h@END_TAG:%8(%9,%0,%1,%2,%3,%4)             h@%8(l@:p@-,%0,%1,%2,%3,%4)       // ???:
-#define h@END_STRING:%8(%9,%0,%1,%2,%3,%4)          h@%8(k@:p@-,%0,%1,%2,%3,%4)       // string:
-#define h@END_STRING_TAG:%8(%9,%0,%1,%2,%3,%4)      h@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string:
-#define h@END_TAG_STRING:%8(%9,%0,%1,%2,%3,%4)      h@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string: ???:
+#define h@RET_VOID:%8(%9,%0,%1,%2,%3,%4)            h@%8(g@:p@-,%0,%1,%2,%3,%4)       // void:
+#define h@RET_VOID_STRING:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // void: string:
+#define h@RET_STRING_VOID:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // 
+#define h@RET_VOID_TAG:%8(%9,%0,%1,%2,%3,%4)        h@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // void: ???:
+#define h@RET_TAG_VOID:%8(%9,%0,%1,%2,%3,%4)        h@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // 
+#define h@RET_VOID_STRING_TAG:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // void: string: ???:
+#define h@RET_STRING_VOID_TAG:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
+#define h@RET_VOID_TAG_STRING:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
+#define h@RET_STRING_TAG_VOID:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
+#define h@RET_TAG_VOID_STRING:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
+#define h@RET_TAG_STRING_VOID:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // 
+#define h@RET_TAG:%8(%9,%0,%1,%2,%3,%4)             h@%8(l@:p@-,%0,%1,%2,%3,%4)       // ???:
+#define h@RET_STRING:%8(%9,%0,%1,%2,%3,%4)          h@%8(k@:p@-,%0,%1,%2,%3,%4)       // string:
+#define h@RET_STRING_TAG:%8(%9,%0,%1,%2,%3,%4)      h@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string:
+#define h@RET_TAG_STRING:%8(%9,%0,%1,%2,%3,%4)      h@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string: ???:
 
 // All the parameter types that can be detected (hopefully all).  "tag" macros
 // will also match multi-tag types such as "{tag, _}:..."
