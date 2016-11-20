@@ -23,12 +23,6 @@
 // parameter types for a function, auto-generate call specifiers, and otherwise
 // create code-dependent macros.
 
-#define @END%0$ %0
-#define @OB (
-#define @CB )
-#define @CM ,
-#define @DL $
-
 // Remove this tag from any final output after all other parsing is done.
 #define string:
 #define void:
@@ -42,13 +36,7 @@
 // by a custom macro name prefix for the user code, followed by the parameters
 // to parse.  We always have "o@:" on the end to detect remaining parameters
 // (this will detect any type not covered by others).
-#define FUNC_PARSER(%0,%1)(%3(%4)) h@%1(,,,,,o@:x@[])(%0)%3(%4,)
-
-// Expression entry point.
-#define e@
-
-// Statement entry point.
-#define s@
+#define FUNC_PARSER(%0,%1)(%3(%4)) PARSE@%1(,,,,,o@:x@[])(%0)%3(%4,)
 
 // Modifiers for parameter types.  These detect optional extra bits such as
 // "const" and tags.
@@ -121,297 +109,297 @@
 // Obviously "other" comes last as it will match literally anything else.  The
 // string and array options must be relatively ordered, but their order relative
 // to "&" and "..." is arbitrary.  Once all the type options are collected, the
-// "h@WHATEVER" macros will stop triggering and the "h@()" macro will trigger
-// instead to combine all the tag macros.
-#define h@(%9,%0,%1,%2,%3,%4)(%5)%6(%7) __:z@:m@:n@[%9]%0%1%2%3%4(%5)%6(|||%7)$
+// "PARSE@WHATEVER" macros will stop triggering and the "PARSE@()" macro will
+// trigger instead to combine all the tag macros.
+#define PARSE@(%9,%0,%1,%2,%3,%4)(%5)%6(%7) __:z@:m@:n@[%9]%0%1%2%3%4(%5)%6(|||%7)$
 
 // Return types.
-#define h@RET_VOD:%8(%9,%0,%1,%2,%3,%4)         h@%8(g@:p@-,%0,%1,%2,%3,%4)       // void:
-#define h@RET_VOD_STR:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // void: string:
-#define h@RET_STR_VOD                       h@RET_VOD_STR
-#define h@RET_VOD_TAG:%8(%9,%0,%1,%2,%3,%4)     h@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // void: ???:
-#define h@RET_TAG_VOD                       h@RET_VOD_TAG
-#define h@RET_VOD_STR_TAG:%8(%9,%0,%1,%2,%3,%4) h@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // void: string: ???:
-#define h@RET_STR_VOD_TAG                   h@RET_VOD_STR_TAG
-#define h@RET_VOD_TAG_STR                   h@RET_VOD_STR_TAG
-#define h@RET_STR_TAG_VOD                   h@RET_VOD_STR_TAG
-#define h@RET_TAG_VOD_STR                   h@RET_VOD_STR_TAG
-#define h@RET_TAG_STR_VOD                   h@RET_VOD_STR_TAG
-#define h@RET_TAG:%8(%9,%0,%1,%2,%3,%4)         h@%8(l@:p@-,%0,%1,%2,%3,%4)       // ???:
-#define h@RET_STR:%8(%9,%0,%1,%2,%3,%4)         h@%8(k@:p@-,%0,%1,%2,%3,%4)       // string:
-#define h@RET_STR_TAG:%8(%9,%0,%1,%2,%3,%4)     h@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string: ???:
-#define h@RET_TAG_STR                       h@RET_STR_TAG
+#define PARSE@RET_VOD:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(g@:p@-,%0,%1,%2,%3,%4)       // void:
+#define PARSE@RET_VOD_STR:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(g@:k@:p@-,%0,%1,%2,%3,%4)    // void: string:
+#define PARSE@RET_STR_VOD                       PARSE@RET_VOD_STR
+#define PARSE@RET_VOD_TAG:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(g@:l@:p@-,%0,%1,%2,%3,%4)    // void: ???:
+#define PARSE@RET_TAG_VOD                       PARSE@RET_VOD_TAG
+#define PARSE@RET_VOD_STR_TAG:%8(%9,%0,%1,%2,%3,%4) PARSE@%8(g@:k@:l@:p@-,%0,%1,%2,%3,%4) // void: string: ???:
+#define PARSE@RET_STR_VOD_TAG                   PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_VOD_TAG_STR                   PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_STR_TAG_VOD                   PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_TAG_VOD_STR                   PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_TAG_STR_VOD                   PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_TAG:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(l@:p@-,%0,%1,%2,%3,%4)       // ???:
+#define PARSE@RET_STR:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(k@:p@-,%0,%1,%2,%3,%4)       // string:
+#define PARSE@RET_STR_TAG:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(k@:l@:p@-,%0,%1,%2,%3,%4)    // string: ???:
+#define PARSE@RET_TAG_STR                       PARSE@RET_STR_TAG
 
-#define h@RET_VOID            h@RET_VOD
-#define h@RET_VOID_STRING     h@RET_VOD_STR
-#define h@RET_STRING_VOID     h@RET_VOD_STR
-#define h@RET_VOID_TAG        h@RET_VOD_TAG
-#define h@RET_TAG_VOID        h@RET_VOD_TAG
-#define h@RET_VOID_STRING_TAG h@RET_VOD_STR_TAG
-#define h@RET_STRING_VOID_TAG h@RET_VOD_STR_TAG
-#define h@RET_VOID_TAG_STRING h@RET_VOD_STR_TAG
-#define h@RET_STRING_TAG_VOID h@RET_VOD_STR_TAG
-#define h@RET_TAG_VOID_STRING h@RET_VOD_STR_TAG
-#define h@RET_TAG_STRING_VOID h@RET_VOD_STR_TAG
-#define h@RET_STRING          h@RET_STR
-#define h@RET_STRING_TAG      h@RET_STR_TAG
-#define h@RET_TAG_STRING      h@RET_STR_TAG
+#define PARSE@RET_VOID            PARSE@RET_VOD
+#define PARSE@RET_VOID_STRING     PARSE@RET_VOD_STR
+#define PARSE@RET_STRING_VOID     PARSE@RET_VOD_STR
+#define PARSE@RET_VOID_TAG        PARSE@RET_VOD_TAG
+#define PARSE@RET_TAG_VOID        PARSE@RET_VOD_TAG
+#define PARSE@RET_VOID_STRING_TAG PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_STRING_VOID_TAG PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_VOID_TAG_STRING PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_STRING_TAG_VOID PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_TAG_VOID_STRING PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_TAG_STRING_VOID PARSE@RET_VOD_STR_TAG
+#define PARSE@RET_STRING          PARSE@RET_STR
+#define PARSE@RET_STRING_TAG      PARSE@RET_STR_TAG
+#define PARSE@RET_TAG_STRING      PARSE@RET_STR_TAG
 
 // Enforce array lengths.
-// #define h@LEN:%8(%9,%0,a@:x@[%1],%2,%3,o@:x@[%4]) h@(%9,%0,q@:x@[%1j@{%4}],%2,%3,o@:x@[%4])
-#define h@LEN:%8(%9,%0,a@:x@[%1],%2,%3,%4) h@(%9,%0,a@:x@[%1LENGTH_REQUIRED{%2%4}],%2,%3,%4)
-#define h@LENGTH h@LEN
+// #define PARSE@LEN:%8(%9,%0,a@:x@[%1],%2,%3,o@:x@[%4]) PARSE@(%9,%0,q@:x@[%1j@{%4}],%2,%3,o@:x@[%4])
+#define PARSE@LEN:%8(%9,%0,a@:x@[%1],%2,%3,%4) PARSE@(%9,%0,a@:x@[%1LENGTH_REQUIRED{%2%4}],%2,%3,%4)
+#define PARSE@LENGTH PARSE@LEN
 
 // All the parameter types that can be detected (hopefully all).  "tag" macros
 // will also match multi-tag types such as "{tag, _}:..."
-#define h@ARR:%8(%9,%0,%1,%2,%3,%4)             h@%8(%9,%0,a@:x@[],%2,%3,%4)          // a[]
-#define h@NUM_TAG:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,%0,%1,%2,%3,o@:x@[t@:])       // tag:a
-#define h@TAG_NUM                           h@NUM_TAG
-#define h@STR:%8(%9,%0,%1,%2,%3,%4)             h@%8(%9,w@:x@[],%1,%2,%3,%4)          // string:a[]
-#define h@STR_DEF:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,w@:x@[b@:],%1,%2,%3,%4)       // string:a[] = "hi"
-#define h@DEF_STR                           h@STR_DEF
-#define h@NUM:%8(%9,%0,%1,%2,%3,%4)             h@%8(%9,%0,%1,%2,%3,o@:x@[])          // a
-#define h@ARR_TAG:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,%0,a@:x@[t@:],%2,%3,%4)       // tag:a[]
-#define h@TAG_ARR                           h@ARR_TAG
-#define h@NUM_TAG_DEF:%8(%9,%0,%1,%2,%3,%4)     h@%8(%9,%0,%1,%2,%3,o@:x@[t@:d@:])    // tag:a = 5
-#define h@NUM_DEF_TAG                       h@NUM_TAG_DEF
-#define h@TAG_NUM_DEF                       h@NUM_TAG_DEF
-#define h@DEF_NUM_TAG                       h@NUM_TAG_DEF
-#define h@TAG_DEF_NUM                       h@NUM_TAG_DEF
-#define h@DEF_TAG_NUM                       h@NUM_TAG_DEF
-#define h@NUM_DEF:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,%0,%1,%2,%3,o@:x@[d@:])       // a = 5
-#define h@DEF_NUM                           h@NUM_DEF
-#define h@REF:%8(%9,%0,%1,%2,%3,%4)             h@%8(%9,%0,%1,r@:x@[],%3,%4)          // &a
-#define h@REF_TAG:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,%0,%1,r@:x@[t@:],%3,%4)       // &tag:a
-#define h@TAG_REF                           h@REF_TAG
-#define h@REF_DEF:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,%0,%1,r@:x@[d@:],%3,%4)       // &a = 5
-#define h@DEF_REF                           h@REF_DEF
-#define h@REF_TAG_DEF:%8(%9,%0,%1,%2,%3,%4)     h@%8(%9,%0,%1,r@:x@[t@:d@:],%3,%4)    // &tag:a = 5
-#define h@REF_DEF_TAG                       h@REF_TAG_DEF
-#define h@TAG_REF_DEF                       h@REF_TAG_DEF
-#define h@TAG_DEF_REF                       h@REF_TAG_DEF
-#define h@DEF_REF_TAG                       h@REF_TAG_DEF
-#define h@DEF_TAG_REF                       h@REF_TAG_DEF
-#define h@EXT:%8(%9,%0,%1,%2,%3,%4)             h@%8(%9,%0,%1,%2,v@:x@[],%4)          // ...
-#define h@EXT_TAG:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,%0,%1,%2,v@:x@[t@:],%4)       // tag:...
-#define h@TAG_EXT                           h@EXT_TAG
-#define h@ARR_CST:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,%0,a@:x@[c@:],%2,%3,%4)       // const a[]
-#define h@CST_ARR                           h@ARR_CST
-#define h@NUM_CST_TAG:%8(%9,%0,%1,%2,%3,%4)     h@%8(%9,%0,%1,%2,%3,o@:x@[c@:t@:])    // const tag:a
-#define h@NUM_TAG_CST                       h@NUM_CST_TAG
-#define h@TAG_NUM_CST                       h@NUM_CST_TAG
-#define h@TAG_CST_NUM                       h@NUM_CST_TAG
-#define h@CST_NUM_TAG                       h@NUM_CST_TAG
-#define h@CST_TAG_NUM                       h@NUM_CST_TAG
-#define h@STR_CST:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,w@:x@[c@:],%1,%2,%3,%4)       // const string:a[]
-#define h@CST_STR                           h@STR_CST
-#define h@STR_CST_DEF:%8(%9,%0,%1,%2,%3,%4)     h@%8(%9,w@:x@[c@:b@:],%1,%2,%3,%4)    // const string:a[] = "hi"
-#define h@CST_DEF_STR                       h@STR_CST_DEF
-#define h@CST_STR_DEF                       h@STR_CST_DEF
-#define h@DEF_CST_STR                       h@STR_CST_DEF
-#define h@DEF_STR_CST                       h@STR_CST_DEF
-#define h@STR_DEF_CST                       h@STR_CST_DEF
-#define h@NUM_CST:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,%0,%1,%2,%3,o@:x@[c@:])       // const a
-#define h@CST_NUM                           h@NUM_CST
-#define h@ARR_CST_TAG:%8(%9,%0,%1,%2,%3,%4)     h@%8(%9,%0,a@:x@[c@:t@:],%2,%3,%4)    // const tag:a[]
-#define h@CST_TAG_ARR                       h@ARR_CST_TAG
-#define h@CST_ARR_TAG                       h@ARR_CST_TAG
-#define h@ARR_TAG_CST                       h@ARR_CST_TAG
-#define h@TAG_CST_ARR                       h@ARR_CST_TAG
-#define h@TAG_ARR_CST                       h@ARR_CST_TAG
-#define h@NUM_CST_TAG_DEF:%8(%9,%0,%1,%2,%3,%4) h@%8(%9,%0,%1,%2,%3,o@:x@[c@:t@:d@:]) // const tag:a = 5
-#define h@NUM_CST_DEF_TAG                   h@NUM_CST_TAG_DEF
-#define h@NUM_DEF_CST_TAG                   h@NUM_CST_TAG_DEF
-#define h@NUM_DEF_TAG_CST                   h@NUM_CST_TAG_DEF
-#define h@NUM_TAG_CST_DEF                   h@NUM_CST_TAG_DEF
-#define h@NUM_TAG_DEF_CST                   h@NUM_CST_TAG_DEF
-#define h@CST_NUM_TAG_DEF                   h@NUM_CST_TAG_DEF
-#define h@CST_NUM_DEF_TAG                   h@NUM_CST_TAG_DEF
-#define h@DEF_NUM_CST_TAG                   h@NUM_CST_TAG_DEF
-#define h@DEF_NUM_TAG_CST                   h@NUM_CST_TAG_DEF
-#define h@TAG_NUM_CST_DEF                   h@NUM_CST_TAG_DEF
-#define h@TAG_NUM_DEF_CST                   h@NUM_CST_TAG_DEF
-#define h@CST_TAG_NUM_DEF                   h@NUM_CST_TAG_DEF
-#define h@CST_DEF_NUM_TAG                   h@NUM_CST_TAG_DEF
-#define h@DEF_CST_NUM_TAG                   h@NUM_CST_TAG_DEF
-#define h@DEF_TAG_NUM_CST                   h@NUM_CST_TAG_DEF
-#define h@TAG_CST_NUM_DEF                   h@NUM_CST_TAG_DEF
-#define h@TAG_DEF_NUM_CST                   h@NUM_CST_TAG_DEF
-#define h@CST_TAG_DEF_NUM                   h@NUM_CST_TAG_DEF
-#define h@CST_DEF_TAG_NUM                   h@NUM_CST_TAG_DEF
-#define h@DEF_CST_TAG_NUM                   h@NUM_CST_TAG_DEF
-#define h@DEF_TAG_CST_NUM                   h@NUM_CST_TAG_DEF
-#define h@TAG_CST_DEF_NUM                   h@NUM_CST_TAG_DEF
-#define h@TAG_DEF_CST_NUM                   h@NUM_CST_TAG_DEF
-#define h@NUM_CST_DEF:%8(%9,%0,%1,%2,%3,%4)     h@%8(%9,%0,%1,%2,%3,o@:x@[c@:d@:])    // const a = 5
-#define h@CST_NUM_DEF                       h@NUM_CST_DEF
-#define h@CST_DEF_NUM                       h@NUM_CST_DEF
-#define h@DEF_CST_NUM                       h@NUM_CST_DEF
-#define h@DEF_NUM_CST                       h@NUM_CST_DEF
-#define h@NUM_DEF_CST                       h@NUM_CST_DEF
+#define PARSE@ARR:%8(%9,%0,%1,%2,%3,%4)             PARSE@%8(%9,%0,a@:x@[],%2,%3,%4)          // a[]
+#define PARSE@NUM_TAG:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,%0,%1,%2,%3,o@:x@[t@:])       // tag:a
+#define PARSE@TAG_NUM                           PARSE@NUM_TAG
+#define PARSE@STR:%8(%9,%0,%1,%2,%3,%4)             PARSE@%8(%9,w@:x@[],%1,%2,%3,%4)          // string:a[]
+#define PARSE@STR_DEF:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,w@:x@[b@:],%1,%2,%3,%4)       // string:a[] = "hi"
+#define PARSE@DEF_STR                           PARSE@STR_DEF
+#define PARSE@NUM:%8(%9,%0,%1,%2,%3,%4)             PARSE@%8(%9,%0,%1,%2,%3,o@:x@[])          // a
+#define PARSE@ARR_TAG:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,%0,a@:x@[t@:],%2,%3,%4)       // tag:a[]
+#define PARSE@TAG_ARR                           PARSE@ARR_TAG
+#define PARSE@NUM_TAG_DEF:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(%9,%0,%1,%2,%3,o@:x@[t@:d@:])    // tag:a = 5
+#define PARSE@NUM_DEF_TAG                       PARSE@NUM_TAG_DEF
+#define PARSE@TAG_NUM_DEF                       PARSE@NUM_TAG_DEF
+#define PARSE@DEF_NUM_TAG                       PARSE@NUM_TAG_DEF
+#define PARSE@TAG_DEF_NUM                       PARSE@NUM_TAG_DEF
+#define PARSE@DEF_TAG_NUM                       PARSE@NUM_TAG_DEF
+#define PARSE@NUM_DEF:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,%0,%1,%2,%3,o@:x@[d@:])       // a = 5
+#define PARSE@DEF_NUM                           PARSE@NUM_DEF
+#define PARSE@REF:%8(%9,%0,%1,%2,%3,%4)             PARSE@%8(%9,%0,%1,r@:x@[],%3,%4)          // &a
+#define PARSE@REF_TAG:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,%0,%1,r@:x@[t@:],%3,%4)       // &tag:a
+#define PARSE@TAG_REF                           PARSE@REF_TAG
+#define PARSE@REF_DEF:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,%0,%1,r@:x@[d@:],%3,%4)       // &a = 5
+#define PARSE@DEF_REF                           PARSE@REF_DEF
+#define PARSE@REF_TAG_DEF:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(%9,%0,%1,r@:x@[t@:d@:],%3,%4)    // &tag:a = 5
+#define PARSE@REF_DEF_TAG                       PARSE@REF_TAG_DEF
+#define PARSE@TAG_REF_DEF                       PARSE@REF_TAG_DEF
+#define PARSE@TAG_DEF_REF                       PARSE@REF_TAG_DEF
+#define PARSE@DEF_REF_TAG                       PARSE@REF_TAG_DEF
+#define PARSE@DEF_TAG_REF                       PARSE@REF_TAG_DEF
+#define PARSE@EXT:%8(%9,%0,%1,%2,%3,%4)             PARSE@%8(%9,%0,%1,%2,v@:x@[],%4)          // ...
+#define PARSE@EXT_TAG:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,%0,%1,%2,v@:x@[t@:],%4)       // tag:...
+#define PARSE@TAG_EXT                           PARSE@EXT_TAG
+#define PARSE@ARR_CST:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,%0,a@:x@[c@:],%2,%3,%4)       // const a[]
+#define PARSE@CST_ARR                           PARSE@ARR_CST
+#define PARSE@NUM_CST_TAG:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(%9,%0,%1,%2,%3,o@:x@[c@:t@:])    // const tag:a
+#define PARSE@NUM_TAG_CST                       PARSE@NUM_CST_TAG
+#define PARSE@TAG_NUM_CST                       PARSE@NUM_CST_TAG
+#define PARSE@TAG_CST_NUM                       PARSE@NUM_CST_TAG
+#define PARSE@CST_NUM_TAG                       PARSE@NUM_CST_TAG
+#define PARSE@CST_TAG_NUM                       PARSE@NUM_CST_TAG
+#define PARSE@STR_CST:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,w@:x@[c@:],%1,%2,%3,%4)       // const string:a[]
+#define PARSE@CST_STR                           PARSE@STR_CST
+#define PARSE@STR_CST_DEF:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(%9,w@:x@[c@:b@:],%1,%2,%3,%4)    // const string:a[] = "hi"
+#define PARSE@CST_DEF_STR                       PARSE@STR_CST_DEF
+#define PARSE@CST_STR_DEF                       PARSE@STR_CST_DEF
+#define PARSE@DEF_CST_STR                       PARSE@STR_CST_DEF
+#define PARSE@DEF_STR_CST                       PARSE@STR_CST_DEF
+#define PARSE@STR_DEF_CST                       PARSE@STR_CST_DEF
+#define PARSE@NUM_CST:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,%0,%1,%2,%3,o@:x@[c@:])       // const a
+#define PARSE@CST_NUM                           PARSE@NUM_CST
+#define PARSE@ARR_CST_TAG:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(%9,%0,a@:x@[c@:t@:],%2,%3,%4)    // const tag:a[]
+#define PARSE@CST_TAG_ARR                       PARSE@ARR_CST_TAG
+#define PARSE@CST_ARR_TAG                       PARSE@ARR_CST_TAG
+#define PARSE@ARR_TAG_CST                       PARSE@ARR_CST_TAG
+#define PARSE@TAG_CST_ARR                       PARSE@ARR_CST_TAG
+#define PARSE@TAG_ARR_CST                       PARSE@ARR_CST_TAG
+#define PARSE@NUM_CST_TAG_DEF:%8(%9,%0,%1,%2,%3,%4) PARSE@%8(%9,%0,%1,%2,%3,o@:x@[c@:t@:d@:]) // const tag:a = 5
+#define PARSE@NUM_CST_DEF_TAG                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@NUM_DEF_CST_TAG                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@NUM_DEF_TAG_CST                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@NUM_TAG_CST_DEF                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@NUM_TAG_DEF_CST                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@CST_NUM_TAG_DEF                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@CST_NUM_DEF_TAG                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEF_NUM_CST_TAG                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEF_NUM_TAG_CST                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_NUM_CST_DEF                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_NUM_DEF_CST                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@CST_TAG_NUM_DEF                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@CST_DEF_NUM_TAG                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEF_CST_NUM_TAG                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEF_TAG_NUM_CST                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_CST_NUM_DEF                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_DEF_NUM_CST                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@CST_TAG_DEF_NUM                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@CST_DEF_TAG_NUM                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEF_CST_TAG_NUM                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEF_TAG_CST_NUM                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_CST_DEF_NUM                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_DEF_CST_NUM                   PARSE@NUM_CST_TAG_DEF
+#define PARSE@NUM_CST_DEF:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(%9,%0,%1,%2,%3,o@:x@[c@:d@:])    // const a = 5
+#define PARSE@CST_NUM_DEF                       PARSE@NUM_CST_DEF
+#define PARSE@CST_DEF_NUM                       PARSE@NUM_CST_DEF
+#define PARSE@DEF_CST_NUM                       PARSE@NUM_CST_DEF
+#define PARSE@DEF_NUM_CST                       PARSE@NUM_CST_DEF
+#define PARSE@NUM_DEF_CST                       PARSE@NUM_CST_DEF
 
 // Less short names of macros.
-#define h@ARRAY                    h@ARR
-#define h@NUMBER_TAG               h@NUM_TAG
-#define h@TAG_NUMBER               h@NUM_TAG
-#define h@STRING                   h@STR
-#define h@DEFAULT_STRING           h@STR_DEF
-#define h@STRING_DEFAULT           h@STR_DEF
-#define h@NUMBER                   h@NUM
-#define h@TAG_ARRAY                h@ARR_TAG
-#define h@ARRAY_TAG                h@ARR_TAG
-#define h@NUMBER_TAG_DEFAULT       h@NUM_TAG_DEF
-#define h@NUMBER_DEFAULT_TAG       h@NUM_TAG_DEF
-#define h@TAG_NUMBER_DEFAULT       h@NUM_TAG_DEF
-#define h@DEFAULT_NUMBER_TAG       h@NUM_TAG_DEF
-#define h@TAG_DEFAULT_NUMBER       h@NUM_TAG_DEF
-#define h@DEFAULT_TAG_NUMBER       h@NUM_TAG_DEF
-#define h@NUMBER_DEFAULT           h@NUM_DEF
-#define h@DEFAULT_NUMBER           h@NUM_DEF
-#define h@REFERENCE                h@REF
-#define h@TAG_REFERENCE            h@REF_TAG
-#define h@REFERENCE_TAG            h@REF_TAG
-#define h@DEFAULT_REFERENCE        h@REF_DEF
-#define h@REFERENCE_DEFAULT        h@REF_DEF
-#define h@TAG_REFERENCE_DEFAULT    h@REF_TAG_DEF
-#define h@TAG_DEFAULT_REFERENCE    h@REF_TAG_DEF
-#define h@REFERENCE_TAG_DEFAULT    h@REF_TAG_DEF
-#define h@REFERENCE_DEFAULT_TAG    h@REF_TAG_DEF
-#define h@DEFAULT_REFERENCE_TAG    h@REF_TAG_DEF
-#define h@DEFAULT_TAG_REFERENCE    h@REF_TAG_DEF
-#define h@VARARG                   h@EXT
-#define h@VARARG_TAG               h@EXT_TAG
-#define h@TAG_VARARG               h@EXT_TAG
-#define h@CONST_ARRAY              h@ARR_CST
-#define h@ARRAY_CONST              h@ARR_CST
-#define h@NUMBER_CONST_TAG         h@NUM_CST_TAG
-#define h@NUMBER_TAG_CONST         h@NUM_CST_TAG
-#define h@CONST_NUMBER_TAG         h@NUM_CST_TAG
-#define h@TAG_NUMBER_CONST         h@NUM_CST_TAG
-#define h@CONST_TAG_NUMBER         h@NUM_CST_TAG
-#define h@TAG_CONST_NUMBER         h@NUM_CST_TAG
-#define h@CONST_STRING             h@STR_CST
-#define h@STRING_CONST             h@STR_CST
-#define h@CONST_DEFAULT_STRING     h@STR_CST_DEF
-#define h@CONST_STRING_DEFAULT     h@STR_CST_DEF
-#define h@DEFAULT_CONST_STRING     h@STR_CST_DEF
-#define h@DEFAULT_STRING_CONST     h@STR_CST_DEF
-#define h@STRING_CONST_DEFAULT     h@STR_CST_DEF
-#define h@STRING_DEFAULT_CONST     h@STR_CST_DEF
-#define h@CONST_NUMBER             h@NUM_CST
-#define h@NUMBER_CONST             h@NUM_CST
-#define h@CONST_TAG_ARRAY          h@ARR_CST_TAG
-#define h@CONST_ARRAY_TAG          h@ARR_CST_TAG
-#define h@ARRAY_CONST_TAG          h@ARR_CST_TAG
-#define h@ARRAY_TAG_CONST          h@ARR_CST_TAG
-#define h@TAG_CONST_ARRAY          h@ARR_CST_TAG
-#define h@TAG_ARRAY_CONST          h@ARR_CST_TAG
-#define h@NUMBER_CONST_TAG_DEFAULT h@NUM_CST_TAG_DEF
-#define h@NUMBER_CONST_DEFAULT_TAG h@NUM_CST_TAG_DEF
-#define h@NUMBER_DEFAULT_CONST_TAG h@NUM_CST_TAG_DEF
-#define h@NUMBER_DEFAULT_TAG_CONST h@NUM_CST_TAG_DEF
-#define h@NUMBER_TAG_CONST_DEFAULT h@NUM_CST_TAG_DEF
-#define h@NUMBER_TAG_DEFAULT_CONST h@NUM_CST_TAG_DEF
-#define h@CONST_NUMBER_TAG_DEFAULT h@NUM_CST_TAG_DEF
-#define h@CONST_NUMBER_DEFAULT_TAG h@NUM_CST_TAG_DEF
-#define h@DEFAULT_NUMBER_CONST_TAG h@NUM_CST_TAG_DEF
-#define h@DEFAULT_NUMBER_TAG_CONST h@NUM_CST_TAG_DEF
-#define h@TAG_NUMBER_CONST_DEFAULT h@NUM_CST_TAG_DEF
-#define h@TAG_NUMBER_DEFAULT_CONST h@NUM_CST_TAG_DEF
-#define h@CONST_TAG_NUMBER_DEFAULT h@NUM_CST_TAG_DEF
-#define h@CONST_DEFAULT_NUMBER_TAG h@NUM_CST_TAG_DEF
-#define h@DEFAULT_CONST_NUMBER_TAG h@NUM_CST_TAG_DEF
-#define h@DEFAULT_TAG_NUMBER_CONST h@NUM_CST_TAG_DEF
-#define h@TAG_CONST_NUMBER_DEFAULT h@NUM_CST_TAG_DEF
-#define h@TAG_DEFAULT_NUMBER_CONST h@NUM_CST_TAG_DEF
-#define h@CONST_TAG_DEFAULT_NUMBER h@NUM_CST_TAG_DEF
-#define h@CONST_DEFAULT_TAG_NUMBER h@NUM_CST_TAG_DEF
-#define h@DEFAULT_CONST_TAG_NUMBER h@NUM_CST_TAG_DEF
-#define h@DEFAULT_TAG_CONST_NUMBER h@NUM_CST_TAG_DEF
-#define h@TAG_CONST_DEFAULT_NUMBER h@NUM_CST_TAG_DEF
-#define h@TAG_DEFAULT_CONST_NUMBER h@NUM_CST_TAG_DEF
-#define h@CONST_NUMBER_DEFAULT     h@NUM_CST_DEF
-#define h@CONST_DEFAULT_NUMBER     h@NUM_CST_DEF
-#define h@DEFAULT_CONST_NUMBER     h@NUM_CST_DEF
-#define h@DEFAULT_NUMBER_CONST     h@NUM_CST_DEF
-#define h@NUMBER_CONST_DEFAULT     h@NUM_CST_DEF
-#define h@NUMBER_DEFAULT_CONST     h@NUM_CST_DEF
+#define PARSE@ARRAY                    PARSE@ARR
+#define PARSE@NUMBER_TAG               PARSE@NUM_TAG
+#define PARSE@TAG_NUMBER               PARSE@NUM_TAG
+#define PARSE@STRING                   PARSE@STR
+#define PARSE@DEFAULT_STRING           PARSE@STR_DEF
+#define PARSE@STRING_DEFAULT           PARSE@STR_DEF
+#define PARSE@NUMBER                   PARSE@NUM
+#define PARSE@TAG_ARRAY                PARSE@ARR_TAG
+#define PARSE@ARRAY_TAG                PARSE@ARR_TAG
+#define PARSE@NUMBER_TAG_DEFAULT       PARSE@NUM_TAG_DEF
+#define PARSE@NUMBER_DEFAULT_TAG       PARSE@NUM_TAG_DEF
+#define PARSE@TAG_NUMBER_DEFAULT       PARSE@NUM_TAG_DEF
+#define PARSE@DEFAULT_NUMBER_TAG       PARSE@NUM_TAG_DEF
+#define PARSE@TAG_DEFAULT_NUMBER       PARSE@NUM_TAG_DEF
+#define PARSE@DEFAULT_TAG_NUMBER       PARSE@NUM_TAG_DEF
+#define PARSE@NUMBER_DEFAULT           PARSE@NUM_DEF
+#define PARSE@DEFAULT_NUMBER           PARSE@NUM_DEF
+#define PARSE@REFERENCE                PARSE@REF
+#define PARSE@TAG_REFERENCE            PARSE@REF_TAG
+#define PARSE@REFERENCE_TAG            PARSE@REF_TAG
+#define PARSE@DEFAULT_REFERENCE        PARSE@REF_DEF
+#define PARSE@REFERENCE_DEFAULT        PARSE@REF_DEF
+#define PARSE@TAG_REFERENCE_DEFAULT    PARSE@REF_TAG_DEF
+#define PARSE@TAG_DEFAULT_REFERENCE    PARSE@REF_TAG_DEF
+#define PARSE@REFERENCE_TAG_DEFAULT    PARSE@REF_TAG_DEF
+#define PARSE@REFERENCE_DEFAULT_TAG    PARSE@REF_TAG_DEF
+#define PARSE@DEFAULT_REFERENCE_TAG    PARSE@REF_TAG_DEF
+#define PARSE@DEFAULT_TAG_REFERENCE    PARSE@REF_TAG_DEF
+#define PARSE@VARARG                   PARSE@EXT
+#define PARSE@VARARG_TAG               PARSE@EXT_TAG
+#define PARSE@TAG_VARARG               PARSE@EXT_TAG
+#define PARSE@CONST_ARRAY              PARSE@ARR_CST
+#define PARSE@ARRAY_CONST              PARSE@ARR_CST
+#define PARSE@NUMBER_CONST_TAG         PARSE@NUM_CST_TAG
+#define PARSE@NUMBER_TAG_CONST         PARSE@NUM_CST_TAG
+#define PARSE@CONST_NUMBER_TAG         PARSE@NUM_CST_TAG
+#define PARSE@TAG_NUMBER_CONST         PARSE@NUM_CST_TAG
+#define PARSE@CONST_TAG_NUMBER         PARSE@NUM_CST_TAG
+#define PARSE@TAG_CONST_NUMBER         PARSE@NUM_CST_TAG
+#define PARSE@CONST_STRING             PARSE@STR_CST
+#define PARSE@STRING_CONST             PARSE@STR_CST
+#define PARSE@CONST_DEFAULT_STRING     PARSE@STR_CST_DEF
+#define PARSE@CONST_STRING_DEFAULT     PARSE@STR_CST_DEF
+#define PARSE@DEFAULT_CONST_STRING     PARSE@STR_CST_DEF
+#define PARSE@DEFAULT_STRING_CONST     PARSE@STR_CST_DEF
+#define PARSE@STRING_CONST_DEFAULT     PARSE@STR_CST_DEF
+#define PARSE@STRING_DEFAULT_CONST     PARSE@STR_CST_DEF
+#define PARSE@CONST_NUMBER             PARSE@NUM_CST
+#define PARSE@NUMBER_CONST             PARSE@NUM_CST
+#define PARSE@CONST_TAG_ARRAY          PARSE@ARR_CST_TAG
+#define PARSE@CONST_ARRAY_TAG          PARSE@ARR_CST_TAG
+#define PARSE@ARRAY_CONST_TAG          PARSE@ARR_CST_TAG
+#define PARSE@ARRAY_TAG_CONST          PARSE@ARR_CST_TAG
+#define PARSE@TAG_CONST_ARRAY          PARSE@ARR_CST_TAG
+#define PARSE@TAG_ARRAY_CONST          PARSE@ARR_CST_TAG
+#define PARSE@NUMBER_CONST_TAG_DEFAULT PARSE@NUM_CST_TAG_DEF
+#define PARSE@NUMBER_CONST_DEFAULT_TAG PARSE@NUM_CST_TAG_DEF
+#define PARSE@NUMBER_DEFAULT_CONST_TAG PARSE@NUM_CST_TAG_DEF
+#define PARSE@NUMBER_DEFAULT_TAG_CONST PARSE@NUM_CST_TAG_DEF
+#define PARSE@NUMBER_TAG_CONST_DEFAULT PARSE@NUM_CST_TAG_DEF
+#define PARSE@NUMBER_TAG_DEFAULT_CONST PARSE@NUM_CST_TAG_DEF
+#define PARSE@CONST_NUMBER_TAG_DEFAULT PARSE@NUM_CST_TAG_DEF
+#define PARSE@CONST_NUMBER_DEFAULT_TAG PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEFAULT_NUMBER_CONST_TAG PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEFAULT_NUMBER_TAG_CONST PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_NUMBER_CONST_DEFAULT PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_NUMBER_DEFAULT_CONST PARSE@NUM_CST_TAG_DEF
+#define PARSE@CONST_TAG_NUMBER_DEFAULT PARSE@NUM_CST_TAG_DEF
+#define PARSE@CONST_DEFAULT_NUMBER_TAG PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEFAULT_CONST_NUMBER_TAG PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEFAULT_TAG_NUMBER_CONST PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_CONST_NUMBER_DEFAULT PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_DEFAULT_NUMBER_CONST PARSE@NUM_CST_TAG_DEF
+#define PARSE@CONST_TAG_DEFAULT_NUMBER PARSE@NUM_CST_TAG_DEF
+#define PARSE@CONST_DEFAULT_TAG_NUMBER PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEFAULT_CONST_TAG_NUMBER PARSE@NUM_CST_TAG_DEF
+#define PARSE@DEFAULT_TAG_CONST_NUMBER PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_CONST_DEFAULT_NUMBER PARSE@NUM_CST_TAG_DEF
+#define PARSE@TAG_DEFAULT_CONST_NUMBER PARSE@NUM_CST_TAG_DEF
+#define PARSE@CONST_NUMBER_DEFAULT     PARSE@NUM_CST_DEF
+#define PARSE@CONST_DEFAULT_NUMBER     PARSE@NUM_CST_DEF
+#define PARSE@DEFAULT_CONST_NUMBER     PARSE@NUM_CST_DEF
+#define PARSE@DEFAULT_NUMBER_CONST     PARSE@NUM_CST_DEF
+#define PARSE@NUMBER_CONST_DEFAULT     PARSE@NUM_CST_DEF
+#define PARSE@NUMBER_DEFAULT_CONST     PARSE@NUM_CST_DEF
 
 // Multi-dimensional arrays.
-#define h@ARR_MUL:%8(%9,%0,%1,%2,%3,%4)         h@%8(%9,%0,a@:x@[f@:],%2,%3,%4)       // a[][]
-#define h@MUL_ARR                           h@ARR_MUL
-#define h@ARR_TAG_MUL:%8(%9,%0,%1,%2,%3,%4)     h@%8(%9,%0,a@:x@[f@:t@:],%2,%3,%4)    // tag:a[][]
-#define h@TAG_MUL_ARR                       h@ARR_TAG_MUL
-#define h@TAG_ARR_MUL                       h@ARR_TAG_MUL
-#define h@ARR_MUL_TAG                       h@ARR_TAG_MUL
-#define h@MUL_ARR_TAG                       h@ARR_TAG_MUL
-#define h@MUL_TAG_ARR                       h@ARR_TAG_MUL
-#define h@ARR_CST_MUL:%8(%9,%0,%1,%2,%3,%4)     h@%8(%9,%0,a@:x@[f@:c@:],%2,%3,%4)    // const a[][]
-#define h@CST_MUL_ARR                       h@ARR_CST_MUL
-#define h@CST_ARR_MUL                       h@ARR_CST_MUL
-#define h@ARR_MUL_CST                       h@ARR_CST_MUL
-#define h@MUL_CST_ARR                       h@ARR_CST_MUL
-#define h@MUL_ARR_CST                       h@ARR_CST_MUL
-#define h@ARR_CST_TAG_MUL:%8(%9,%0,%1,%2,%3,%4) h@%8(%9,%0,a@:x@[f@:c@:t@:],%2,%3,%4) // const tag:a[][]
-#define h@CST_TAG_ARR_MUL                   h@ARR_CST_TAG_MUL
-#define h@CST_TAG_MUL_ARR                   h@ARR_CST_TAG_MUL
-#define h@CST_ARR_TAG_MUL                   h@ARR_CST_TAG_MUL
-#define h@CST_ARR_MUL_TAG                   h@ARR_CST_TAG_MUL
-#define h@CST_MUL_ARR_TAG                   h@ARR_CST_TAG_MUL
-#define h@CST_MUL_TAG_ARR                   h@ARR_CST_TAG_MUL
-#define h@TAG_CST_ARR_MUL                   h@ARR_CST_TAG_MUL
-#define h@TAG_CST_MUL_ARR                   h@ARR_CST_TAG_MUL
-#define h@ARR_CST_MUL_TAG                   h@ARR_CST_TAG_MUL
-#define h@MUL_CST_ARR_TAG                   h@ARR_CST_TAG_MUL
-#define h@MUL_CST_TAG_ARR                   h@ARR_CST_TAG_MUL
-#define h@TAG_ARR_CST_MUL                   h@ARR_CST_TAG_MUL
-#define h@TAG_MUL_CST_ARR                   h@ARR_CST_TAG_MUL
-#define h@ARR_TAG_CST_MUL                   h@ARR_CST_TAG_MUL
-#define h@ARR_MUL_CST_TAG                   h@ARR_CST_TAG_MUL
-#define h@MUL_ARR_CST_TAG                   h@ARR_CST_TAG_MUL
-#define h@MUL_TAG_CST_ARR                   h@ARR_CST_TAG_MUL
-#define h@TAG_ARR_MUL_CST                   h@ARR_CST_TAG_MUL
-#define h@TAG_MUL_ARR_CST                   h@ARR_CST_TAG_MUL
-#define h@ARR_TAG_MUL_CST                   h@ARR_CST_TAG_MUL
-#define h@ARR_MUL_TAG_CST                   h@ARR_CST_TAG_MUL
-#define h@MUL_ARR_TAG_CST                   h@ARR_CST_TAG_MUL
-#define h@MUL_TAG_ARR_CST                   h@ARR_CST_TAG_MUL
-#define h@ARRAY_MULTI           h@ARR_MUL
-#define h@MULTI_ARRAY           h@ARR_MUL
-#define h@TAG_ARRAY_MULTI       h@ARR_TAG_MUL
-#define h@TAG_MULTI_ARRAY       h@ARR_TAG_MUL
-#define h@ARRAY_TAG_MULTI       h@ARR_TAG_MUL
-#define h@ARRAY_MULTI_TAG       h@ARR_TAG_MUL
-#define h@MULTI_ARRAY_TAG       h@ARR_TAG_MUL
-#define h@MULTI_TAG_ARRAY       h@ARR_TAG_MUL
-#define h@CONST_MULTI_ARRAY     h@ARR_CST_MUL
-#define h@CONST_ARRAY_MULTI     h@ARR_CST_MUL
-#define h@ARRAY_CONST_MULTI     h@ARR_CST_MUL
-#define h@ARRAY_MULTI_CONST     h@ARR_CST_MUL
-#define h@MULTI_CONST_ARRAY     h@ARR_CST_MUL
-#define h@MULTI_ARRAY_CONST     h@ARR_CST_MUL
-#define h@CONST_TAG_ARRAY_MULTI h@ARR_CST_TAG_MUL
-#define h@CONST_TAG_MULTI_ARRAY h@ARR_CST_TAG_MUL
-#define h@CONST_ARRAY_TAG_MULTI h@ARR_CST_TAG_MUL
-#define h@CONST_ARRAY_MULTI_TAG h@ARR_CST_TAG_MUL
-#define h@CONST_MULTI_ARRAY_TAG h@ARR_CST_TAG_MUL
-#define h@CONST_MULTI_TAG_ARRAY h@ARR_CST_TAG_MUL
-#define h@TAG_CONST_ARRAY_MULTI h@ARR_CST_TAG_MUL
-#define h@TAG_CONST_MULTI_ARRAY h@ARR_CST_TAG_MUL
-#define h@ARRAY_CONST_TAG_MULTI h@ARR_CST_TAG_MUL
-#define h@ARRAY_CONST_MULTI_TAG h@ARR_CST_TAG_MUL
-#define h@MULTI_CONST_ARRAY_TAG h@ARR_CST_TAG_MUL
-#define h@MULTI_CONST_TAG_ARRAY h@ARR_CST_TAG_MUL
-#define h@TAG_ARRAY_CONST_MULTI h@ARR_CST_TAG_MUL
-#define h@TAG_MULTI_CONST_ARRAY h@ARR_CST_TAG_MUL
-#define h@ARRAY_TAG_CONST_MULTI h@ARR_CST_TAG_MUL
-#define h@ARRAY_MULTI_CONST_TAG h@ARR_CST_TAG_MUL
-#define h@MULTI_ARRAY_CONST_TAG h@ARR_CST_TAG_MUL
-#define h@MULTI_TAG_CONST_ARRAY h@ARR_CST_TAG_MUL
-#define h@TAG_ARRAY_MULTI_CONST h@ARR_CST_TAG_MUL
-#define h@TAG_MULTI_ARRAY_CONST h@ARR_CST_TAG_MUL
-#define h@ARRAY_TAG_MULTI_CONST h@ARR_CST_TAG_MUL
-#define h@ARRAY_MULTI_TAG_CONST h@ARR_CST_TAG_MUL
-#define h@MULTI_ARRAY_TAG_CONST h@ARR_CST_TAG_MUL
-#define h@MULTI_TAG_ARRAY_CONST h@ARR_CST_TAG_MUL
+#define PARSE@ARR_MUL:%8(%9,%0,%1,%2,%3,%4)         PARSE@%8(%9,%0,a@:x@[f@:],%2,%3,%4)       // a[][]
+#define PARSE@MUL_ARR                           PARSE@ARR_MUL
+#define PARSE@ARR_TAG_MUL:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(%9,%0,a@:x@[f@:t@:],%2,%3,%4)    // tag:a[][]
+#define PARSE@TAG_MUL_ARR                       PARSE@ARR_TAG_MUL
+#define PARSE@TAG_ARR_MUL                       PARSE@ARR_TAG_MUL
+#define PARSE@ARR_MUL_TAG                       PARSE@ARR_TAG_MUL
+#define PARSE@MUL_ARR_TAG                       PARSE@ARR_TAG_MUL
+#define PARSE@MUL_TAG_ARR                       PARSE@ARR_TAG_MUL
+#define PARSE@ARR_CST_MUL:%8(%9,%0,%1,%2,%3,%4)     PARSE@%8(%9,%0,a@:x@[f@:c@:],%2,%3,%4)    // const a[][]
+#define PARSE@CST_MUL_ARR                       PARSE@ARR_CST_MUL
+#define PARSE@CST_ARR_MUL                       PARSE@ARR_CST_MUL
+#define PARSE@ARR_MUL_CST                       PARSE@ARR_CST_MUL
+#define PARSE@MUL_CST_ARR                       PARSE@ARR_CST_MUL
+#define PARSE@MUL_ARR_CST                       PARSE@ARR_CST_MUL
+#define PARSE@ARR_CST_TAG_MUL:%8(%9,%0,%1,%2,%3,%4) PARSE@%8(%9,%0,a@:x@[f@:c@:t@:],%2,%3,%4) // const tag:a[][]
+#define PARSE@CST_TAG_ARR_MUL                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@CST_TAG_MUL_ARR                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@CST_ARR_TAG_MUL                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@CST_ARR_MUL_TAG                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@CST_MUL_ARR_TAG                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@CST_MUL_TAG_ARR                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_CST_ARR_MUL                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_CST_MUL_ARR                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARR_CST_MUL_TAG                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@MUL_CST_ARR_TAG                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@MUL_CST_TAG_ARR                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_ARR_CST_MUL                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_MUL_CST_ARR                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARR_TAG_CST_MUL                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARR_MUL_CST_TAG                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@MUL_ARR_CST_TAG                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@MUL_TAG_CST_ARR                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_ARR_MUL_CST                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_MUL_ARR_CST                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARR_TAG_MUL_CST                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARR_MUL_TAG_CST                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@MUL_ARR_TAG_CST                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@MUL_TAG_ARR_CST                   PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARRAY_MULTI           PARSE@ARR_MUL
+#define PARSE@MULTI_ARRAY           PARSE@ARR_MUL
+#define PARSE@TAG_ARRAY_MULTI       PARSE@ARR_TAG_MUL
+#define PARSE@TAG_MULTI_ARRAY       PARSE@ARR_TAG_MUL
+#define PARSE@ARRAY_TAG_MULTI       PARSE@ARR_TAG_MUL
+#define PARSE@ARRAY_MULTI_TAG       PARSE@ARR_TAG_MUL
+#define PARSE@MULTI_ARRAY_TAG       PARSE@ARR_TAG_MUL
+#define PARSE@MULTI_TAG_ARRAY       PARSE@ARR_TAG_MUL
+#define PARSE@CONST_MULTI_ARRAY     PARSE@ARR_CST_MUL
+#define PARSE@CONST_ARRAY_MULTI     PARSE@ARR_CST_MUL
+#define PARSE@ARRAY_CONST_MULTI     PARSE@ARR_CST_MUL
+#define PARSE@ARRAY_MULTI_CONST     PARSE@ARR_CST_MUL
+#define PARSE@MULTI_CONST_ARRAY     PARSE@ARR_CST_MUL
+#define PARSE@MULTI_ARRAY_CONST     PARSE@ARR_CST_MUL
+#define PARSE@CONST_TAG_ARRAY_MULTI PARSE@ARR_CST_TAG_MUL
+#define PARSE@CONST_TAG_MULTI_ARRAY PARSE@ARR_CST_TAG_MUL
+#define PARSE@CONST_ARRAY_TAG_MULTI PARSE@ARR_CST_TAG_MUL
+#define PARSE@CONST_ARRAY_MULTI_TAG PARSE@ARR_CST_TAG_MUL
+#define PARSE@CONST_MULTI_ARRAY_TAG PARSE@ARR_CST_TAG_MUL
+#define PARSE@CONST_MULTI_TAG_ARRAY PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_CONST_ARRAY_MULTI PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_CONST_MULTI_ARRAY PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARRAY_CONST_TAG_MULTI PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARRAY_CONST_MULTI_TAG PARSE@ARR_CST_TAG_MUL
+#define PARSE@MULTI_CONST_ARRAY_TAG PARSE@ARR_CST_TAG_MUL
+#define PARSE@MULTI_CONST_TAG_ARRAY PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_ARRAY_CONST_MULTI PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_MULTI_CONST_ARRAY PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARRAY_TAG_CONST_MULTI PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARRAY_MULTI_CONST_TAG PARSE@ARR_CST_TAG_MUL
+#define PARSE@MULTI_ARRAY_CONST_TAG PARSE@ARR_CST_TAG_MUL
+#define PARSE@MULTI_TAG_CONST_ARRAY PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_ARRAY_MULTI_CONST PARSE@ARR_CST_TAG_MUL
+#define PARSE@TAG_MULTI_ARRAY_CONST PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARRAY_TAG_MULTI_CONST PARSE@ARR_CST_TAG_MUL
+#define PARSE@ARRAY_MULTI_TAG_CONST PARSE@ARR_CST_TAG_MUL
+#define PARSE@MULTI_ARRAY_TAG_CONST PARSE@ARR_CST_TAG_MUL
+#define PARSE@MULTI_TAG_ARRAY_CONST PARSE@ARR_CST_TAG_MUL
 
