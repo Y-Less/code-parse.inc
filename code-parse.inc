@@ -98,11 +98,36 @@
 
 // Detect possible function modifiers
 #define e@[%5]
-#define statice@[%5] %5_static()
-#define stocke@[%5] %5_stock()
-#define publice@[%5] %5_public()
-#define conste@[%5] %5_const()
-#define forwarde@[%5] %5_forward()
+
+// Default PAWN keywords.
+#define statice@[%5]   %5_static()
+#define stocke@[%5]    %5_stock()
+#define publice@[%5]   %5_public()
+#define conste@[%5]    %5_const()
+#define forwarde@[%5]  %5_forward()
+#define newe@[%5]      %5_new()
+#define statee@[%5]    %5_state()
+#define operatore@[%5] %5_state()
+
+// YSI keywords.
+#define globale@[%5]       %5_global()
+#define foreigne@[%5]      %5_foreign()
+#define timere@[%5]        %5_timer()
+#define ptaske@[%5]        %5_ptask()
+#define taske@[%5]         %5_task()
+#define remoterunce@[%5]   %5_remoterunc()
+#define hooke@[%5]         %5_hook()
+#define inlinee@[%5]       %5_inline()
+#define group_hooke@[%5]   %5_group_hook()
+#define master_hooke@[%5]  %5_master_hook()
+#define master_taske@[%5]  %5_master_task()
+#define master_ptaske@[%5] %5_master_ptask()
+#define master_funce@[%5]  %5_master_func()
+#define @foreigne@[%5]     %5_@foreign()
+#define @globale@[%5]      %5_@global()
+#define timerfunce@[%5]    %5_timerfunc()
+#define loadtexte@[%5]     %5_loadtext()
+
 #define s@:h@:i@(%0\32;[%5](%8)) %8(%0)
 #define h@:i@(%0\32;%2[%5](%8)) %0e@[%5]s@:h@:i@(%2[%5](%8))
 #define i@(%0[%5](%8)) %8(%0)

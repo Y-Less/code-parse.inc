@@ -1303,13 +1303,13 @@ the wrong place - this might work slightly, but not fully.
 ## QAL (QUALIFICATION)
 
 Function qualifiers are the bits that come before the name, i.e. `stock`,
-`static`, `forward`, and `public`.  If you are using YSI, this extends to
-include `const`, `global`, `foreign`, `timer`, `ptask`, `task`, `remoterunc`,
-`hook`, `inline`, `group_hook`, `master_hook`, `master_task`, `master_ptask`,
-`master_func`, `@foreign`, `@global`, `timerfunc`, and `loadtext`.  That last
-one is only valid on variables, `const` and `inline` are only used on inline
-functions, and several of these are uncommon synonyms or alternate (backup)
-spellings.
+`static`, `const`, `new`, `operator`, `forward`, and `public`.  If you are using
+YSI, this extends to include `global`, `foreign`, `timer`, `ptask`, `task`,
+`remoterunc`, `hook`, `inline`, `group_hook`, `master_hook`, `master_task`,
+`master_ptask`, `master_func`, `@foreign`, `@global`, `timerfunc`, and
+`loadtext`.  That last one is only valid on variables, `const` and `inline` are
+only used on inline functions, and several of these are uncommon synonyms or
+alternate (backup) spellings.
 
 The point is, keywords can be used before functions, and can be detected when
 using the `QAL:` modifier.  The keywords are only detected if they come after
