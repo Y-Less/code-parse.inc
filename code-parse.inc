@@ -79,7 +79,7 @@
 #define o@:x@[%8]%9.%0(%5)%3(%1|||%7) %8%5_NUM(,,%1)%0(%5)%3(|||%7)
 
 // Detect none.
-#define z@:%0[%9]%0(%5)%3(|||,%7) %9%5_NUL(%3)%7
+#define z@:%0[%9]%0(%5)%3(|||,%7) %9%5_NUL(%3)n@DROP[%5]%7
 
 // Detect out of parameters.
 #define n@[%9]%0(%5)%3(%6|||%7) %9%5_END(%3)n@DROP[%5]%7
@@ -106,7 +106,6 @@
 #define h@:i@(%0\32;%2[%5](%8)) %0e@[%5]s@:h@:i@(%2[%5](%8))
 #define i@(%0[%5](%8)) %8(%0)
 #define y@:%8(%1)%2[%5] s@:h@:i@(%1[%5](%8))%2[%5]
-// #define y@:%0(%1)%2[%5]  WAS(%0_(%1)%2_[%5]) // %0(%1)%2(%5)
 
 // We need the macros in a very specific order, because some will match others
 // as well.  For example, arrays will match strings but not vice-versa, so we

@@ -1340,6 +1340,10 @@ stock timer my_timer[200]()
 The `PREFIX_keyword` macro is called after all the parameters have been
 processed, but before the ending macros are called (`_END`, `_NUL`, etc.)
 
+If you don't want to support a qualifier, just don't define it.  If there is no
+`PREFIX_public` and they try use `public` then they will get a very nice error
+of `error 017: undefined symbol "PREFIX_public"`.
+
 ## API
 
 The `FUNC_PARSER` macro is the main API entry-point, and generates the macros to
@@ -1417,7 +1421,7 @@ In to:
 ```pawn
 main()
 {
-	static  InlineFunc_1[_:I@E:32]=# InlineFunc_1":....";if(I@E(_:@Ia:@Ib:@Ic:@Ib:@Ic:@Id: InlineFunc_1))for(new a, b[_:@Iy:32], c[_:(130)];I@F();)while(I@L(I@K(1),0,@Ix,sizeof  c))
+	static  InlineFunc[_:I@E:32]=# InlineFunc":....";if(I@E(_:@Ia:@Ib:@Ic:@Ib:@Ic:@Id: InlineFunc))for(new a, b[_:@Iy:32], c[_:(130)];I@F();)while(I@L(I@K(1),0,@Ix,sizeof  c))
 	{
 		// Code.
 	}
@@ -1430,12 +1434,12 @@ Representing:
 main()
 {
 	static
-		InlineFunc_1[32] = "InlineFunc_1:....";
-	if (Inline_Entry(InlineFunc_1))
+		InlineFunc[32] = "InlineFunc:....";
+	if (Inline_Entry(InlineFunc))
 	{
 		for (new a, b[32], c[130]; Inline_Allocator(); )
 		{
-			while (Inline_Main(Inline_Count(1), 0, cellmax, sizeof (c)))
+			while (Inline_Main(const, 0, cellmax, sizeof (c)))
 			{
 				// Code.
 			}
@@ -1462,5 +1466,47 @@ after:
 The run-time implementation of y_inline is not the focus of this example though,
 only the macros.
 
-***TODO***.
+Because inline functions are at a function local level, not a global level, we
+need two custom macros to start and end the parsing.  These closely mimick the
+ones in the inclue (`__:` and `u@$`), but wrap all the tag macros up in a local
+array size instead of a function parameter array size:
+
+```pawn
+#define PARSE@INLINE(%9,%0,%1,%2,%3,%4)(%5)%6(%7) static %6[_:z@:m@:n@[%9]%0%1%2%3%4(%5)%6(|||%7) I@O$
+#define I@O$ 32]=
+```
+
+The library normally calls `PARSE@` once it has finished parsing the
+`FUNC_PARSER` parameters, to start the processing.  This is hijacked by adding
+an unknown type in to the parameters at the end - our own `INLINE` one:
+
+```pawn
+#define inline%0(%1) FUNC_PARSER(INLINE,ARR:REF:STR:NUM:QAL:INLINE)(%0(%1))()1()
+```
+
+The `I@O$` macro mirrors `u@$` - both of them are there to remove the final `$`
+on which most of the processing is based (this is the symbol used to skip over
+internal state by `%8$`, but needs removing eventually.  They both also close
+the array size in which the tag macros are hidden from the syntax checker.
+
+From there the remaining macros are straight forward.  First collate the
+parameters in to two lists - one for names and one for numeric representations
+of size and type (`0` = variable, `-1` = reference, `cellmax` = string, other =
+array (given as the size)).
+
+```pawn
+#define INLINE_STR(%9,%9,%2,%9)%8$(%0)%1(%3) %8$(%0,%2[YSI_MAX_INLINE_STRING])%1(%3,cellmax)
+#define INLINE_ARR(%9,%9,%2,%9)%8$(%0)%1(%3) %8$(%0,%2[%9])%1(%3,%9)
+#define INLINE_NUM(%9,%9,%2)%8$(%0)%1(%3) %8$(%0,%2)%1(%3,0)
+#define INLINE_REF(%9,%9,%2)%8$(%0)%1(%3) %8$(%0,%2)%1(%3,-1)
+
+#define INLINE_END(%9)%8$(,%0)%1(%3) %8$#%9":....";if (I@E(%9))for(new %0;I@F();)while(I@L(I@K(%1)%3))
+
+#define INLINE_NUL(%9)%8$()%1() %8$#%9":....";if (I@E(%9))for(;I@F();)while(I@L(I@K(%1)))
+
+#define INLINE_const(%9)%8$(%0)%1(%2) %8$(%0)(%2)
+```
+
+Note that in writing this code, I found a bug in the old version, which was very
+cleanly fixed in this code.
 
