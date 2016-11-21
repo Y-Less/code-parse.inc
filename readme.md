@@ -30,7 +30,7 @@
 * [LEN (LENGTH)](#len)
 * [QAL (QUALIFICATION)](#qal)
 * [API](#api)
-* [y_inline](#y_inline)
+* [Example 8 - y_inline](#example-8---y_inline)
 
 ## Introduction
 
@@ -1396,7 +1396,7 @@ your own input to the magical `__:` macro:
 But don't be upset if the underlying macros change (since they have even since I
 copied them here).
 
-## y_inline
+## Example 8 - y_inline
 
 This entire library is designed for parsing function declarations.  These appear
 at the global scope - with one exception: y_inline (or any other inline library
