@@ -27,8 +27,8 @@
   * [Use](#use-1)
 * [Example 7 - y_timers Clone](#example-7---y_timers-clone)
   * [Use](#use)
-* [LEN (LENGTH)](#len)
-* [QAL (QUALIFICATION)](#qal)
+* [LEN (LENGTH)](#len-length)
+* [QAL (QUALIFICATION)](#qal-qualification)
 * [API](#api)
 * [Example 8 - y_inline](#example-8---y_inline)
 
