@@ -27,8 +27,8 @@
   * [Use](#use-1)
 * [Example 7 - y_timers Clone](#example-7---y_timers-clone)
   * [Use](#use)
-* [LEN (LENGTH)](#len)
-* [QAL (QUALIFICATION)](#qal)
+* [LEN (LENGTH)](#len-length)
+* [QAL (QUALIFICATION)](#qal-qualification)
 * [API](#api)
 * [Example 8 - y_inline](#example-8---y_inline)
 
@@ -1318,7 +1318,7 @@ the main entry macro:
 ```pawn
 #define timer%0[%2](%1) FUNC_PARSER(TIMER,QAL:ARR_CST:STR_CST_DEF:NUM_CST_DEF:LEN:)(%0(%1)) [%2]()(%1)##$
 
-#define TIMER_stock()%8$ %8$ // Saw "stock"
+#define TIMER_stock(%9)%8$ %8$ // Saw "stock"
 ```
 
 Will be detected:
@@ -1343,6 +1343,10 @@ processed, but before the ending macros are called (`_END`, `_NUL`, etc.)
 If you don't want to support a qualifier, just don't define it.  If there is no
 `PREFIX_public` and they try use `public` then they will get a very nice error
 of `error 017: undefined symbol "PREFIX_public"`.
+
+Currently the keyword callbacks do not have any parameters, but use
+`PREFIX_forward(%9)` anyway - that will work even with zero parameters, and will
+ensure future proofing in case more are added.
 
 ## API
 
