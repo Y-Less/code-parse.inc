@@ -163,8 +163,7 @@
 #define PARSE@RET_TAG_STRING      PARSE@RET_STR_TAG
 
 // Enforce array lengths.
-// #define PARSE@LEN:%8(%9,%0,a@:x@[%1],%2,%3,o@:x@[%4]) PARSE@(%9,%0,q@:x@[%1j@{%4}],%2,%3,o@:x@[%4])
-#define PARSE@LEN:%8(%9,%0,a@:x@[%1],%2,%3,%4) PARSE@(%9,%0,a@:x@[%1LENGTH_REQUIRED{%2%4}],%2,%3,%4)
+#define PARSE@LEN:%8(%9,%0,a@:x@[%1],%2,%3,%4) PARSE@%8(%9,%0,a@:x@[%1LENGTH_REQUIRED{%2%4}],%2,%3,%4)
 #define PARSE@LENGTH PARSE@LEN
 
 // All the parameter types that can be detected (hopefully all).  "tag" macros

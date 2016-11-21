@@ -1500,9 +1500,9 @@ array (given as the size)).
 #define INLINE_NUM(%9,%9,%2)%8$(%0)%1(%3) %8$(%0,%2)%1(%3,0)
 #define INLINE_REF(%9,%9,%2)%8$(%0)%1(%3) %8$(%0,%2)%1(%3,-1)
 
-#define INLINE_END(%9)%8$(,%0)%1(%3) %8$#%9":....";if (I@E(%9))for(new %0;I@F();)while(I@L(I@K(%1)%3))
+#define INLINE_END(%9)%8$(,%0)%1(%3) %8$#%9":....";if(I@E(%9))for(new %0;I@F();)while(I@L(I@K(%1)%3))
 
-#define INLINE_NUL(%9)%8$()%1() %8$#%9":....";if (I@E(%9))for(;I@F();)while(I@L(I@K(%1)))
+#define INLINE_NUL(%9)%8$()%1() %8$#%9":....";if(I@E(%9))for(;I@F();)while(I@L(I@K(%1)))
 
 #define INLINE_const(%9)%8$(%0)%1(%2) %8$(%0)(%2)
 ```
