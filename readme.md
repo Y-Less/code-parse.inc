@@ -1400,7 +1400,7 @@ copied them here).
 
 This entire library is designed for parsing function declarations.  These appear
 at the global scope - with one exception: y_inline (or any other inline library
-that someone cares to write).  The `__` macro on which the tag-based parsing
+that someone cares to write).  The `__:` macro on which the tag-based parsing
 works only works at the top level (I tried very hard to make it work everywhere,
 but it just didn't QUITE happen).
 
@@ -1439,7 +1439,7 @@ main()
 	{
 		for (new a, b[32], c[130]; Inline_Allocator(); )
 		{
-			while (Inline_Main(const, 0, cellmax, sizeof (c)))
+			while (Inline_Main(HAS(const), 0, cellmax, sizeof (c)))
 			{
 				// Code.
 			}
