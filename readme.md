@@ -1365,18 +1365,18 @@ FUNC_PARSER(REBUILD,ARRAY_TAG_CONST_MULTI:NUMBER_CONST_TAG_DEFAULT:TAG_REFERENCE
 In to this:
 
 ```pawn
-__:z@:l@:w@:x@<c@:b@:>a@:x@<f@:c@:t@:>v@:x@<t@:>r@:x@<t@:d@:>o@:x@<c@:t@:d@:>(REBUILD)func(||||||params,)$
+PARSER@FUNC:z@:l@:w@:x@<c@:b@:>a@:x@<f@:c@:t@:>v@:x@<t@:>r@:x@<t@:d@:>o@:x@<c@:t@:d@:>(REBUILD)func(||||||params,)$
 ```
 
 I.e. just provides a nice API for using the parser.  The actual complex part is
 done by these few macros.  Feel free to take just these if you want and derive
-your own input to the magical `__:` macro:
+your own input to the magical `PARSER@FUNC:` macro:
 
 ```pawn
 #define void:
 #define string:
 #define u@$ 0]);
-#define __:%0$ u@(u[_:%0 u@$
+#define PARSER@FUNC:%0$ u@(u[_:%0 u@$
 #define c@:%8(%0,%1,%9const%2) %8(%0const ,%1,%9%2)
 #define t@:%8(%0,%1,%9:%2) %8(%0,%1%9:,%2)
 #define d@:%8(%0,%1,%2=%9) %8_DEF(%0,%1,%2,%9)
@@ -1400,9 +1400,12 @@ copied them here).
 
 This entire library is designed for parsing function declarations.  These appear
 at the global scope - with one exception: y_inline (or any other inline library
-that someone cares to write).  The `__:` macro on which the tag-based parsing
-works only works at the top level (I tried very hard to make it work everywhere,
-but it just didn't QUITE happen).
+that someone cares to write).  The `PARSER@FUNC:` macro on which the tag-based
+parsing works only works at the top level (I tried very hard to make it work
+everywhere, but it just didn't QUITE happen).  Note that this macro was
+previously written as `__:` (and that macro still has value), but it was renamed
+in this library for flexibility, because it is internal, and to minimise global
+namespace pollution.
 
 y_inline converts this:
 
@@ -1468,20 +1471,20 @@ only the macros.
 
 Because inline functions are at a function local level, not a global level, we
 need two custom macros to start and end the parsing.  These closely mimick the
-ones in the inclue (`__:` and `u@$`), but wrap all the tag macros up in a local
-array size instead of a function parameter array size:
+ones in the inclue (`PARSER@FUNC:` and `u@$`), but wrap all the tag macros up in
+a local array size instead of a function parameter array size:
 
 ```pawn
-#define PARSE@INLINE(%9,%0,%1,%2,%3,%4)(%5)%6(%7) static %6[_:z@:m@:n@[%9]%0%1%2%3%4(%5)%6(|||%7) I@O$
+#define PARSER@INLINE:%0(%5)%6(%7)$ static %6[_:%0(%5)%6(%7) I@O$
 #define I@O$ 32]=
 ```
 
 The library normally calls `PARSE@` once it has finished parsing the
-`FUNC_PARSER` parameters, to start the processing.  This is hijacked by adding
-an unknown type in to the parameters at the end - our own `INLINE` one:
+`FUNC_PARSER` parameters, to start the processing.  Instead we call
+`MAKE_PARSER` directly, with an extra `:INLINE` parameter.
 
 ```pawn
-#define inline%0(%1) FUNC_PARSER(INLINE,ARR:REF:STR:NUM:QAL:INLINE)(%0(%1))()1()
+#define inline%0(%1) MAKE_PARSER(INLINE,ARR:REF:STR:NUM:QAL::INLINE)(%0(%1))()1()
 ```
 
 The `I@O$` macro mirrors `u@$` - both of them are there to remove the final `$`

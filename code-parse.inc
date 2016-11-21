@@ -30,13 +30,14 @@
 // A very generic entry point.  This can be used by any other system to put
 // arbitrary macros at the top level of the file without compiler errors.
 #define u@$ 0]);
-#define __:%0$ u@(u[_:%0 u@$
+#define PARSER@FUNC:%0$ u@(u[_:%0 u@$
 
 // This is the "global" entry point.  It takes a list of parser types, followed
 // by a custom macro name prefix for the user code, followed by the parameters
 // to parse.  We always have "o@:" on the end to detect remaining parameters
 // (this will detect any type not covered by others).
-#define FUNC_PARSER(%0,%1)(%3(%4)) PARSE@%1(p@--,,,,,o@:x@[])(%0)%3(%4,)
+#define MAKE_PARSER(%0,%1)(%3(%4)) PARSE@%1(p@--,,,,,o@:x@[])(%0)%3(%4,)
+#define FUNC_PARSER(%0,%1) MAKE_PARSER(%0,%1:FUNC)
 
 // Modifiers for parameter types.  These detect optional extra bits such as
 // "const" and tags.
@@ -125,7 +126,7 @@
 // to "&" and "..." is arbitrary.  Once all the type options are collected, the
 // "PARSE@WHATEVER" macros will stop triggering and the "PARSE@()" macro will
 // trigger instead to combine all the tag macros.
-#define PARSE@(%9,%0,%1,%2,%3,%4)(%5)%6(%7) __:z@:m@:n@[%9]%0%1%2%3%4(%5)%6(|||%7)$
+#define PARSE@:%8(%9,%0,%1,%2,%3,%4)(%5)%6(%7) PARSER@%8:z@:m@:n@[%9]%0%1%2%3%4(%5)%6(|||%7)$
 
 // Return types.
 #define PARSE@RET_VOD:%8(%9-%7-,%0,%1,%2,%3,%4)         PARSE@%8(g@:p@-%7-,%0,%1,%2,%3,%4)       // void:
