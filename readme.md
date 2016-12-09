@@ -29,6 +29,7 @@
   * [Use](#use)
 * [LEN (LENGTH)](#len-length)
 * [QAL (QUALIFICATION)](#qal-qualification)
+* [SPC (SPECIAL)](#spc-special)
 * [API](#api)
 * [Example 8 - y_inline](#example-8---y_inline)
 
@@ -1347,6 +1348,19 @@ of `error 017: undefined symbol "PREFIX_public"`.
 Currently the keyword callbacks do not have any parameters, but use
 `PREFIX_forward(%9)` anyway - that will work even with zero parameters, and will
 ensure future proofing in case more are added.
+
+## SPC (SPECIAL)
+
+*Special* arrays are those declared through macros with `<>` instead of `[]`,
+e.g. iterators:
+
+```pawn
+new Iterator:Vehicles<MAX_VEHICLES>;
+```
+
+The `SPC` (`SPECIAL`) and `SPC_CST` (`SPECIAL_CONST`) specifiers add detection
+for these special arrays.  There is no `_TAG` variant since they always have a
+tag by definition.
 
 ## API
 
