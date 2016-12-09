@@ -356,6 +356,16 @@ main()
 }
 ```
 
+Tags are always included with their `:`.  This could be detected and ignored
+with:
+
+```pawn
+#define PREFIX_ARR(%0,%1:,%2,%3)%8$ %8$
+```
+
+But it should be noted that while that will return tags without their colon, it
+will now fail to work for any variable without a tag at all.
+
 ## Example 4 - Auto-Generate `CallRemoteFunction` Specifier Strings
 
 Time for a more advanced example, using the parameter names more.  The end
@@ -1360,7 +1370,32 @@ new Iterator:Vehicles<MAX_VEHICLES>;
 
 The `SPC` (`SPECIAL`) and `SPC_CST` (`SPECIAL_CONST`) specifiers add detection
 for these special arrays.  There is no `_TAG` variant since they always have a
-tag by definition.
+tag by definition.  Their callback would be:
+
+```pawn
+#define PREFIX_SPC(%0,%1,%2,%3)%8$
+```
+
+With:
+
+Substitution parameter | Use
+--- | ---
+`%0`  | `const ` (if it exists).
+`%1`  | The special type - `Iterator:` above (with the colon, as ever).
+`%2`  | The variable name - `Vehicles` above.
+`%3`  | Size (anything between the `<>`s) - `MAX_VEHICLES` above.
+
+I did test `Iterator:` with this, but that one generates so much other complex
+code that it ran out of memory - the parser works, but just be careful with what
+the special array macro generates later.  Also, `<>`s are not real brackets, so
+commas between them will totally break everything, for example this:
+
+```pawn
+MY_PARSER:func(Iterator:Vehicles<MAX_PLAYERS, MAX_VEHICLES>)
+```
+
+will be interpreted as two invalid parameters - `Iterator:Vehicles<MAX_PLAYERS`
+and `MAX_VEHICLES>` instead of what it should be.
 
 ## API
 
