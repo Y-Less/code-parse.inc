@@ -34,9 +34,9 @@
 
 // This is the "global" entry point.  It takes a list of parser types, followed
 // by a custom macro name prefix for the user code, followed by the parameters
-// to parse.  We always have "A@:" on the end to detect remaining parameters
+// to parse.  We always have "p@:" on the end to detect remaining parameters
 // (this will detect any type not covered by others).
-#define MAKE_PARSER(%0,%1)(%3(%4)) PARSE@%1(p@--,,,,,,A@:x@[])(%0)%3(%4,)
+#define MAKE_PARSER(%0,%1)(%3(%4)) PARSE@%1(--,,,,,,p@:x@[])(%0)%3(%4,)
 #define FUNC_PARSER(%0,%1) MAKE_PARSER(%0,%1:FUNC)
 
 // Modifiers for parameter types.  These detect optional extra bits such as
@@ -80,7 +80,7 @@
 #define v@:x@[%8]%9.%0(%5)%3(%1...%2|||%7) %8%5_EXT(,,%1%2)%0(%5)%3(|||%7)
 
 // Detect others.
-#define A@:x@[%8]%9.%0(%5)%3(%1|||%7) %8%5_NUM(,,%1)%0(%5)%3(|||%7)
+#define p@:x@[%8]%9.%0(%5)%3(%1|||%7) %8%5_NUM(,,%1)%0(%5)%3(|||%7)
 
 // Detect none.
 #define z@:%0[%9]%0(%5)%3(|||,%7) %9%5_NUL(%3)n@DROP[%5]%7
@@ -93,10 +93,9 @@
 #define m@:n@[%9]%0(%5)%3(%6|||%7,%8) %0.m@:n@[%9]%0(%5)%3(%7|||%8)
 
 // Detect possible return types.
-#define g@:%9-%6-%5(%9void:%3) %6%5_VOD(%3)
-#define k@:%9-%6-%5(%9string:%3) %6%5_STR(%3)
-#define l@:%9-%6-%5(%9:%3) %6PARSE_WILL_BE(%9)%5_TAG<:,%3>
-#define p@-%6-%5(%3) %6%5(%3)
+#define g@:%9~~%5(%9void:%3) %5_VOD(%3)
+#define k@:%9~~%5(%9string:%3) %5_STR(%3)
+#define l@:%9~~%5(%9:%3) PARSE_WILL_BE(%9)%5_TAG<:,%3>
 #define PARSE_WILL_BE(%9)%5<%3> %5(%9%3)
 
 // Detect possible function modifiers
@@ -131,10 +130,10 @@
 #define timerfunce@[%5]    %5_timerfunc()
 #define loadtexte@[%5]     %5_loadtext()
 
-#define s@:h@:i@(%0\32;[%5](%8)) %8(%0)
-#define h@:i@(%0\32;%2[%5](%8)) %0e@[%5]s@:h@:i@(%2[%5](%8))
-#define i@(%0[%5](%8)) %8(%0)
-#define y@:%8(%1)%2[%5] s@:h@:i@(%1[%5](%8))%2[%5]
+#define s@:h@:i@:%4(%0\32;[%5](%8)) %4%8(%0)
+#define h@:i@:%4(%0\32;%2[%5](%8)) %0e@[%5]h@:i@:%4(%2[%5](%8))
+#define i@:%4(%0[%5](%8)) %8(%0)
+#define y@:%8(%1)%2[%5] s@:h@:i@:%8(%1[%5](%8))%2[%5]
 
 // We need the macros in a very specific order, because some will match others
 // as well.  For example, arrays will match strings but not vice-versa, so we
@@ -154,24 +153,24 @@
 // to "&" and "..." is arbitrary.  Once all the type options are collected, the
 // "PARSE@WHATEVER" macros will stop triggering and the "PARSE@()" macro will
 // trigger instead to combine all the tag macros.
-#define PARSE@:%8(%9,%0)(%5)%6(%7) PARSE_EXPAND@(%0)PARSER@%8:z@:m@:n@[%9](%5)%6(|||%7)$
+#define PARSE@:%8(%9-%2-,%0)(%5)%6(%7) PARSE_EXPAND@(%0)PARSER@%8:z@:m@:n@[%2%9~~](%5)%6(|||%7)$
 #define PARSE_EXPAND@(%0,%1,%2,%5,%3,%4)%6[%7] %6[%7]%0%1%2%5%3%4
 
 // Return types.
-#define PARSE@RET_VOD:%8(%9-%7-,%0,%1,%2,%5,%3,%4)         PARSE@%8(g@:p@-%7-,%0,%1,%2,%5,%3,%4)       // void:
-#define PARSE@RET_VOD_STR:%8(%9-%7-,%0,%1,%2,%5,%3,%4)     PARSE@%8(g@:k@:p@-%7-,%0,%1,%2,%5,%3,%4)    // void: string:
+#define PARSE@RET_VOD:%8(%9-%7-,%0,%1,%2,%5,%3,%4)         PARSE@%8(g@:-%7-,%0,%1,%2,%5,%3,%4)       // void:
+#define PARSE@RET_VOD_STR:%8(%9-%7-,%0,%1,%2,%5,%3,%4)     PARSE@%8(g@:k@:-%7-,%0,%1,%2,%5,%3,%4)    // void: string:
 #define PARSE@RET_STR_VOD                       PARSE@RET_VOD_STR
-#define PARSE@RET_VOD_TAG:%8(%9-%7-,%0,%1,%2,%5,%3,%4)     PARSE@%8(g@:l@:p@-%7-,%0,%1,%2,%5,%3,%4)    // void: ???:
+#define PARSE@RET_VOD_TAG:%8(%9-%7-,%0,%1,%2,%5,%3,%4)     PARSE@%8(g@:l@:-%7-,%0,%1,%2,%5,%3,%4)    // void: ???:
 #define PARSE@RET_TAG_VOD                       PARSE@RET_VOD_TAG
-#define PARSE@RET_VOD_STR_TAG:%8(%9-%7-,%0,%1,%2,%5,%3,%4) PARSE@%8(g@:k@:l@:p@-%7-,%0,%1,%2,%5,%3,%4) // void: string: ???:
+#define PARSE@RET_VOD_STR_TAG:%8(%9-%7-,%0,%1,%2,%5,%3,%4) PARSE@%8(g@:k@:l@:-%7-,%0,%1,%2,%5,%3,%4) // void: string: ???:
 #define PARSE@RET_STR_VOD_TAG                   PARSE@RET_VOD_STR_TAG
 #define PARSE@RET_VOD_TAG_STR                   PARSE@RET_VOD_STR_TAG
 #define PARSE@RET_STR_TAG_VOD                   PARSE@RET_VOD_STR_TAG
 #define PARSE@RET_TAG_VOD_STR                   PARSE@RET_VOD_STR_TAG
 #define PARSE@RET_TAG_STR_VOD                   PARSE@RET_VOD_STR_TAG
-#define PARSE@RET_TAG:%8(%9-%7-,%0,%1,%2,%5,%3,%4)         PARSE@%8(l@:p@-%7-,%0,%1,%2,%5,%3,%4)       // ???:
-#define PARSE@RET_STR:%8(%9-%7-,%0,%1,%2,%5,%3,%4)         PARSE@%8(k@:p@-%7-,%0,%1,%2,%5,%3,%4)       // string:
-#define PARSE@RET_STR_TAG:%8(%9-%7-,%0,%1,%2,%5,%3,%4)     PARSE@%8(k@:l@:p@-%7-,%0,%1,%2,%5,%3,%4)    // string: ???:
+#define PARSE@RET_TAG:%8(%9-%7-,%0,%1,%2,%5,%3,%4)         PARSE@%8(l@:-%7-,%0,%1,%2,%5,%3,%4)       // ???:
+#define PARSE@RET_STR:%8(%9-%7-,%0,%1,%2,%5,%3,%4)         PARSE@%8(k@:-%7-,%0,%1,%2,%5,%3,%4)       // string:
+#define PARSE@RET_STR_TAG:%8(%9-%7-,%0,%1,%2,%5,%3,%4)     PARSE@%8(k@:l@:-%7-,%0,%1,%2,%5,%3,%4)    // string: ???:
 #define PARSE@RET_TAG_STR                       PARSE@RET_STR_TAG
 
 #define PARSE@QAL:%8(%9-%7-,%0,%1,%2,%5,%3,%4) PARSE@%8(%9-y@:-,%0,%1,%2,%5,%3,%4)       // stock, const, etc.
@@ -198,19 +197,19 @@
 
 // All the parameter types that can be detected (hopefully all).  "tag" macros
 // will also match multi-tag types such as "{tag, _}:..."
-#define PARSE@NUM_TAG:%8(%9,%0,%1,%2,%5,%3,%4)         PARSE@%8(%9,%0,%1,%2,%5,%3,A@:x@[t@:])       // tag:a
+#define PARSE@NUM_TAG:%8(%9,%0,%1,%2,%5,%3,%4)         PARSE@%8(%9,%0,%1,%2,%5,%3,p@:x@[t@:])       // tag:a
 #define PARSE@TAG_NUM                           PARSE@NUM_TAG
 #define PARSE@STR:%8(%9,%0,%1,%2,%5,%3,%4)             PARSE@%8(%9,w@:x@[],%1,%2,%5,%3,%4)          // string:a[]
 #define PARSE@STR_DEF:%8(%9,%0,%1,%2,%5,%3,%4)         PARSE@%8(%9,w@:x@[b@:],%1,%2,%5,%3,%4)       // string:a[] = "hi"
 #define PARSE@DEF_STR                           PARSE@STR_DEF
-#define PARSE@NUM:%8(%9,%0,%1,%2,%5,%3,%4)             PARSE@%8(%9,%0,%1,%2,%5,%3,A@:x@[])          // a
-#define PARSE@NUM_TAG_DEF:%8(%9,%0,%1,%2,%5,%3,%4)     PARSE@%8(%9,%0,%1,%2,%5,%3,A@:x@[t@:d@:])    // tag:a = 5
+#define PARSE@NUM:%8(%9,%0,%1,%2,%5,%3,%4)             PARSE@%8(%9,%0,%1,%2,%5,%3,p@:x@[])          // a
+#define PARSE@NUM_TAG_DEF:%8(%9,%0,%1,%2,%5,%3,%4)     PARSE@%8(%9,%0,%1,%2,%5,%3,p@:x@[t@:d@:])    // tag:a = 5
 #define PARSE@NUM_DEF_TAG                       PARSE@NUM_TAG_DEF
 #define PARSE@TAG_NUM_DEF                       PARSE@NUM_TAG_DEF
 #define PARSE@DEF_NUM_TAG                       PARSE@NUM_TAG_DEF
 #define PARSE@TAG_DEF_NUM                       PARSE@NUM_TAG_DEF
 #define PARSE@DEF_TAG_NUM                       PARSE@NUM_TAG_DEF
-#define PARSE@NUM_DEF:%8(%9,%0,%1,%2,%5,%3,%4)         PARSE@%8(%9,%0,%1,%2,%5,%3,A@:x@[d@:])       // a = 5
+#define PARSE@NUM_DEF:%8(%9,%0,%1,%2,%5,%3,%4)         PARSE@%8(%9,%0,%1,%2,%5,%3,p@:x@[d@:])       // a = 5
 #define PARSE@DEF_NUM                           PARSE@NUM_DEF
 #define PARSE@REF:%8(%9,%0,%1,%2,%5,%3,%4)             PARSE@%8(%9,%0,%1,r@:x@[],%5,%3,%4)          // &a
 #define PARSE@REF_TAG:%8(%9,%0,%1,%2,%5,%3,%4)         PARSE@%8(%9,%0,%1,r@:x@[t@:],%5,%3,%4)       // &tag:a
@@ -226,7 +225,7 @@
 #define PARSE@EXT:%8(%9,%0,%1,%2,%5,%3,%4)             PARSE@%8(%9,%0,%1,%2,%5,v@:x@[],%4)          // ...
 #define PARSE@EXT_TAG:%8(%9,%0,%1,%2,%5,%3,%4)         PARSE@%8(%9,%0,%1,%2,%5,v@:x@[t@:],%4)       // tag:...
 #define PARSE@TAG_EXT                           PARSE@EXT_TAG
-#define PARSE@NUM_CST_TAG:%8(%9,%0,%1,%2,%5,%3,%4)     PARSE@%8(%9,%0,%1,%2,%5,%3,A@:x@[c@:t@:])    // const tag:a
+#define PARSE@NUM_CST_TAG:%8(%9,%0,%1,%2,%5,%3,%4)     PARSE@%8(%9,%0,%1,%2,%5,%3,p@:x@[c@:t@:])    // const tag:a
 #define PARSE@NUM_TAG_CST                       PARSE@NUM_CST_TAG
 #define PARSE@TAG_NUM_CST                       PARSE@NUM_CST_TAG
 #define PARSE@TAG_CST_NUM                       PARSE@NUM_CST_TAG
@@ -240,7 +239,7 @@
 #define PARSE@DEF_CST_STR                       PARSE@STR_CST_DEF
 #define PARSE@DEF_STR_CST                       PARSE@STR_CST_DEF
 #define PARSE@STR_DEF_CST                       PARSE@STR_CST_DEF
-#define PARSE@NUM_CST:%8(%9,%0,%1,%2,%5,%3,%4)         PARSE@%8(%9,%0,%1,%2,%5,%3,A@:x@[c@:])       // const a
+#define PARSE@NUM_CST:%8(%9,%0,%1,%2,%5,%3,%4)         PARSE@%8(%9,%0,%1,%2,%5,%3,p@:x@[c@:])       // const a
 #define PARSE@CST_NUM                           PARSE@NUM_CST
 #define PARSE@ARR:%8(%9,%0,%1,%2,%5,%3,%4)             PARSE@%8(%9,%0,a@:x@[],%2,%5,%3,%4)          // a[]
 #define PARSE@ARR_TAG:%8(%9,%0,%1,%2,%5,%3,%4)         PARSE@%8(%9,%0,a@:x@[t@:],%2,%5,%3,%4)       // tag:a[]
@@ -253,7 +252,7 @@
 #define PARSE@ARR_TAG_CST                       PARSE@ARR_CST_TAG
 #define PARSE@TAG_CST_ARR                       PARSE@ARR_CST_TAG
 #define PARSE@TAG_ARR_CST                       PARSE@ARR_CST_TAG
-#define PARSE@NUM_CST_TAG_DEF:%8(%9,%0,%1,%2,%5,%3,%4) PARSE@%8(%9,%0,%1,%2,%5,%3,A@:x@[c@:t@:d@:]) // const tag:a = 5
+#define PARSE@NUM_CST_TAG_DEF:%8(%9,%0,%1,%2,%5,%3,%4) PARSE@%8(%9,%0,%1,%2,%5,%3,p@:x@[c@:t@:d@:]) // const tag:a = 5
 #define PARSE@NUM_CST_DEF_TAG                   PARSE@NUM_CST_TAG_DEF
 #define PARSE@NUM_DEF_CST_TAG                   PARSE@NUM_CST_TAG_DEF
 #define PARSE@NUM_DEF_TAG_CST                   PARSE@NUM_CST_TAG_DEF
@@ -277,7 +276,7 @@
 #define PARSE@DEF_TAG_CST_NUM                   PARSE@NUM_CST_TAG_DEF
 #define PARSE@TAG_CST_DEF_NUM                   PARSE@NUM_CST_TAG_DEF
 #define PARSE@TAG_DEF_CST_NUM                   PARSE@NUM_CST_TAG_DEF
-#define PARSE@NUM_CST_DEF:%8(%9,%0,%1,%2,%5,%3,%4)     PARSE@%8(%9,%0,%1,%2,%5,%3,A@:x@[c@:d@:])    // const a = 5
+#define PARSE@NUM_CST_DEF:%8(%9,%0,%1,%2,%5,%3,%4)     PARSE@%8(%9,%0,%1,%2,%5,%3,p@:x@[c@:d@:])    // const a = 5
 #define PARSE@CST_NUM_DEF                       PARSE@NUM_CST_DEF
 #define PARSE@CST_DEF_NUM                       PARSE@NUM_CST_DEF
 #define PARSE@DEF_CST_NUM                       PARSE@NUM_CST_DEF
