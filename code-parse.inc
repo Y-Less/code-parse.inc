@@ -43,7 +43,7 @@
 // "const" and tags.
 
 // Detect "const".
-#define c@:%8(%0,%1,%9const%2) %8(%0const ,%1,%9%2)
+#define c@:%8(%0,%1,%9const%2) %8(%0const ,%1,%2)
 
 // Detect tags.
 #define t@:%8(%0,%1,%9:%2) %8(%0,%1%9:,%2)
@@ -61,8 +61,10 @@
 // Redistribute the new parsers to after the current parameter.
 #define LENGTH_REQUIRED{%9}%0(%1)%2(%3)%4(|||%6,%7) %0(%1)j@:q@:%9.%2(%3)%4(%6|||%7)
 
-// Detect "string:" (words).
-#define w@:x@[%8]%9.%0(%5)%3(%6string:%1[%2]%9|||%7) %8%5_STR(,,%6%1%9,%2)%0(%5)%3(|||%7)
+// Detect "string:" (words).  Done in two parts so "const string:" doesn't fail
+// because the "st" in "const" is detected but is not followed by "i".
+#define c@st:%0(%1,%2,%3st%4) %0(%1,%2,%4)
+#define w@:x@[%8]%9.%0(%5)%3(%6ring:%1[%2]%9|||%7) %8c@st:%5_STR(,,%6%1%9,%2)%0(%5)%3(|||%7)
 
 // Detect "[]".
 #define a@:x@[%8]%9.%0(%5)%3(%1[%2]%9|||%7) %8%5_ARR(,,%1%9,%2)%0(%5)%3(|||%7)
