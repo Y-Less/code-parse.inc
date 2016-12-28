@@ -100,6 +100,17 @@
 #define l@:%9~~%5(%9:%3) PARSE_WILL_BE(%9)%5_TAG<:,%3>
 #define PARSE_WILL_BE(%9)%5<%3> %5(%9%3)
 
+#define PP_LEFT_BRACKET<> (
+#define PP_RIGHT_BRACKET<> )
+#define PP_LEFT_BRACE<> {
+#define PP_RIGHT_BRACE<> }
+#define PP_LEFT_SQUARE_BRACKET<> [
+#define PP_RIGHT_SQUARE_BRACKET<> ]
+#define PP_LEFT_ANGLE_BRACKET<> [
+#define PP_RIGHT_ANGLE_BRACKET<> ]
+#define PP_RIGHT_ANGLE_BRACKET<> ]
+#define PP_NULL<>
+
 // Detect possible function modifiers
 #define e@[%5]
 
