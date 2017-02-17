@@ -106,9 +106,8 @@
 #define PP_RIGHT_BRACE<> }
 #define PP_LEFT_SQUARE_BRACKET<> [
 #define PP_RIGHT_SQUARE_BRACKET<> ]
-#define PP_LEFT_ANGLE_BRACKET<> [
-#define PP_RIGHT_ANGLE_BRACKET<> ]
-#define PP_RIGHT_ANGLE_BRACKET<> ]
+#define PP_LEFT_ANGLE_BRACKET<> <
+#define PP_RIGHT_ANGLE_BRACKET<> >
 #define PP_NULL<>
 
 // Detect possible function modifiers
