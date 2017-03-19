@@ -2442,3 +2442,243 @@ EXAMPLE:Func(      {Tag1, Tag2}:name[  ]); // EXAMPLE_ARR(      ,(Tag1:, {Tag1, 
 EXAMPLE:Func(const {Tag1, Tag2}:name[  ]); // EXAMPLE_ARR(const ,(Tag1:, {Tag1, Tag2}:),name,  )
 ```
 
+### ARRAY_MULTI
+
+AKA **ARR_MUL**
+
+Detects multi-dimensional arrays.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,ARR_MUL:)(%0(%1))
+
+#define EXAMPLE_ARR_ARR(%0,%1,%2,%4,%5)%8$
+
+EXAMPLE:Func(                   name[42][11]); // EXAMPLE_ARR_ARR(,,                   name,42,11)
+EXAMPLE:Func(               Tag:name[42][11]); // EXAMPLE_ARR_ARR(,,               Tag:name,42,11)
+EXAMPLE:Func(const              name[42][11]); // EXAMPLE_ARR_ARR(,,const              name,42,11)
+EXAMPLE:Func(const          Tag:name[42][  ]); // EXAMPLE_ARR_ARR(,,const          Tag:name,42,  )
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(,,      {Tag1, Tag2}:name,42,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(,,const {Tag1, Tag2}:name,42,  )
+EXAMPLE:Func(                   name[  ][11]); // EXAMPLE_ARR_ARR(,,                   name,  ,11)
+EXAMPLE:Func(               Tag:name[  ][11]); // EXAMPLE_ARR_ARR(,,               Tag:name,  ,11)
+EXAMPLE:Func(const              name[  ][11]); // EXAMPLE_ARR_ARR(,,const              name,  ,11)
+EXAMPLE:Func(const          Tag:name[  ][  ]); // EXAMPLE_ARR_ARR(,,const          Tag:name,  ,  )
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(,,      {Tag1, Tag2}:name,  ,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(,,const {Tag1, Tag2}:name,  ,  )
+
+#define EXAMPLE_ARR_ARR_ARR(%0,%1,%2,%4,%5,%6)%8$
+
+EXAMPLE:Func(                   name[42][11][     90]); // EXAMPLE_ARR_ARR_ARR(,,                   name,42,11,90     )
+EXAMPLE:Func(               Tag:name[42][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,,               Tag:name,42,11,MY_ENUM)
+EXAMPLE:Func(const              name[42][11][       ]); // EXAMPLE_ARR_ARR_ARR(,,const              name,42,11,       )
+EXAMPLE:Func(const          Tag:name[42][  ][     90]); // EXAMPLE_ARR_ARR_ARR(,,const          Tag:name,42,  ,90     )
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,,      {Tag1, Tag2}:name,42,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ][       ]); // EXAMPLE_ARR_ARR_ARR(,,const {Tag1, Tag2}:name,42,  ,       )
+EXAMPLE:Func(                   name[  ][11][     90]); // EXAMPLE_ARR_ARR_ARR(,,                   name,  ,11,90     )
+EXAMPLE:Func(               Tag:name[  ][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,,               Tag:name,  ,11,MY_ENUM)
+EXAMPLE:Func(const              name[  ][11][       ]); // EXAMPLE_ARR_ARR_ARR(,,const              name,  ,11,       )
+EXAMPLE:Func(const          Tag:name[  ][  ][     90]); // EXAMPLE_ARR_ARR_ARR(,,const          Tag:name,  ,  ,90     )
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,,      {Tag1, Tag2}:name,  ,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ][       ]); // EXAMPLE_ARR_ARR_ARR(,,const {Tag1, Tag2}:name,  ,  ,       )
+```
+
+### ARRAY_MULTI_CONST
+
+AKA **ARR_MUL_CST**
+
+Detects multi-dimensional arrays with optional `const`s.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,ARR_MUL_CST:)(%0(%1))
+
+#define EXAMPLE_ARR_ARR(%0,%1,%2,%4,%5)%8$
+
+EXAMPLE:Func(                   name[42][11]); // EXAMPLE_ARR_ARR(      ,,             name,42,11)
+EXAMPLE:Func(               Tag:name[42][11]); // EXAMPLE_ARR_ARR(      ,,         Tag:name,42,11)
+EXAMPLE:Func(const              name[42][11]); // EXAMPLE_ARR_ARR(const ,,             name,42,11)
+EXAMPLE:Func(const          Tag:name[42][  ]); // EXAMPLE_ARR_ARR(const ,,         Tag:name,42,  )
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(      ,,{Tag1, Tag2}:name,42,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(const ,,{Tag1, Tag2}:name,42,  )
+EXAMPLE:Func(                   name[  ][11]); // EXAMPLE_ARR_ARR(      ,,             name,  ,11)
+EXAMPLE:Func(               Tag:name[  ][11]); // EXAMPLE_ARR_ARR(      ,,         Tag:name,  ,11)
+EXAMPLE:Func(const              name[  ][11]); // EXAMPLE_ARR_ARR(const ,,             name,  ,11)
+EXAMPLE:Func(const          Tag:name[  ][  ]); // EXAMPLE_ARR_ARR(const ,,         Tag:name,  ,  )
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(      ,,{Tag1, Tag2}:name,  ,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(const ,,{Tag1, Tag2}:name,  ,  )
+
+#define EXAMPLE_ARR_ARR_ARR(%0,%1,%2,%4,%5,%6)%8$
+
+EXAMPLE:Func(                   name[42][11][     90]); // EXAMPLE_ARR_ARR_ARR(      ,,             name,42,11,90     )
+EXAMPLE:Func(               Tag:name[42][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,,         Tag:name,42,11,MY_ENUM)
+EXAMPLE:Func(const              name[42][11][       ]); // EXAMPLE_ARR_ARR_ARR(const ,,             name,42,11,       )
+EXAMPLE:Func(const          Tag:name[42][  ][     90]); // EXAMPLE_ARR_ARR_ARR(const ,,         Tag:name,42,  ,90     )
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,,{Tag1, Tag2}:name,42,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ][       ]); // EXAMPLE_ARR_ARR_ARR(const ,,{Tag1, Tag2}:name,42,  ,       )
+EXAMPLE:Func(                   name[  ][11][     90]); // EXAMPLE_ARR_ARR_ARR(      ,,             name,  ,11,90     )
+EXAMPLE:Func(               Tag:name[  ][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,,         Tag:name,  ,11,MY_ENUM)
+EXAMPLE:Func(const              name[  ][11][       ]); // EXAMPLE_ARR_ARR_ARR(const ,,             name,  ,11,       )
+EXAMPLE:Func(const          Tag:name[  ][  ][     90]); // EXAMPLE_ARR_ARR_ARR(const ,,         Tag:name,  ,  ,90     )
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,,{Tag1, Tag2}:name,  ,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ][       ]); // EXAMPLE_ARR_ARR_ARR(const ,,{Tag1, Tag2}:name,  ,  ,       )
+```
+
+### ARRAY_MULTI_TAG
+
+AKA **ARR_MUL_TAG**
+
+Detects multi-dimensional arrays with optional tags.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,ARR_MUL_TAG:)(%0(%1))
+
+#define EXAMPLE_ARR_ARR(%0,%1,%2,%4,%5)%8$
+
+EXAMPLE:Func(                   name[42][11]); // EXAMPLE_ARR_ARR(,                   ,name,42,11)
+EXAMPLE:Func(               Tag:name[42][11]); // EXAMPLE_ARR_ARR(,               Tag:,name,42,11)
+EXAMPLE:Func(const              name[42][11]); // EXAMPLE_ARR_ARR(,const              ,name,42,11)
+EXAMPLE:Func(const          Tag:name[42][  ]); // EXAMPLE_ARR_ARR(,const          Tag:,name,42,  )
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(,      {Tag1, Tag2}:,name,42,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(,const {Tag1, Tag2}:,name,42,  )
+EXAMPLE:Func(                   name[  ][11]); // EXAMPLE_ARR_ARR(,                   ,name,  ,11)
+EXAMPLE:Func(               Tag:name[  ][11]); // EXAMPLE_ARR_ARR(,               Tag:,name,  ,11)
+EXAMPLE:Func(const              name[  ][11]); // EXAMPLE_ARR_ARR(,const              ,name,  ,11)
+EXAMPLE:Func(const          Tag:name[  ][  ]); // EXAMPLE_ARR_ARR(,const          Tag:,name,  ,  )
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(,      {Tag1, Tag2}:,name,  ,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(,const {Tag1, Tag2}:,name,  ,  )
+
+#define EXAMPLE_ARR_ARR_ARR(%0,%1,%2,%4,%5,%6)%8$
+
+EXAMPLE:Func(                   name[42][11][     90]); // EXAMPLE_ARR_ARR_ARR(,                   ,name,42,11,90     )
+EXAMPLE:Func(               Tag:name[42][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,               Tag:,name,42,11,MY_ENUM)
+EXAMPLE:Func(const              name[42][11][       ]); // EXAMPLE_ARR_ARR_ARR(,const              ,name,42,11,       )
+EXAMPLE:Func(const          Tag:name[42][  ][     90]); // EXAMPLE_ARR_ARR_ARR(,const          Tag:,name,42,  ,90     )
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,      {Tag1, Tag2}:,name,42,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ][       ]); // EXAMPLE_ARR_ARR_ARR(,const {Tag1, Tag2}:,name,42,  ,       )
+EXAMPLE:Func(                   name[  ][11][     90]); // EXAMPLE_ARR_ARR_ARR(,                   ,name,  ,11,90     )
+EXAMPLE:Func(               Tag:name[  ][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,               Tag:,name,  ,11,MY_ENUM)
+EXAMPLE:Func(const              name[  ][11][       ]); // EXAMPLE_ARR_ARR_ARR(,const              ,name,  ,11,       )
+EXAMPLE:Func(const          Tag:name[  ][  ][     90]); // EXAMPLE_ARR_ARR_ARR(,const          Tag:,name,  ,  ,90     )
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,      {Tag1, Tag2}:,name,  ,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ][       ]); // EXAMPLE_ARR_ARR_ARR(,const {Tag1, Tag2}:,name,  ,  ,       )
+```
+
+### ARRAY_MULTI_CONST_TAG
+
+AKA **ARR_MUL_CST_TAG**
+
+Detects multi-dimensional arrays with optional `const`s and tags.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,ARR_MUL_CST_TAG:)(%0(%1))
+
+#define EXAMPLE_ARR_ARR(%0,%1,%2,%4,%5)%8$
+
+EXAMPLE:Func(                   name[42][11]); // EXAMPLE_ARR_ARR(      ,             ,name,42,11)
+EXAMPLE:Func(               Tag:name[42][11]); // EXAMPLE_ARR_ARR(      ,         Tag:,name,42,11)
+EXAMPLE:Func(const              name[42][11]); // EXAMPLE_ARR_ARR(const ,             ,name,42,11)
+EXAMPLE:Func(const          Tag:name[42][  ]); // EXAMPLE_ARR_ARR(const ,         Tag:,name,42,  )
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(      ,{Tag1, Tag2}:,name,42,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(const ,{Tag1, Tag2}:,name,42,  )
+EXAMPLE:Func(                   name[  ][11]); // EXAMPLE_ARR_ARR(      ,             ,name,  ,11)
+EXAMPLE:Func(               Tag:name[  ][11]); // EXAMPLE_ARR_ARR(      ,         Tag:,name,  ,11)
+EXAMPLE:Func(const              name[  ][11]); // EXAMPLE_ARR_ARR(const ,             ,name,  ,11)
+EXAMPLE:Func(const          Tag:name[  ][  ]); // EXAMPLE_ARR_ARR(const ,         Tag:,name,  ,  )
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(      ,{Tag1, Tag2}:,name,  ,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(const ,{Tag1, Tag2}:,name,  ,  )
+
+#define EXAMPLE_ARR_ARR_ARR(%0,%1,%2,%4,%5,%6)%8$
+
+EXAMPLE:Func(                   name[42][11][     90]); // EXAMPLE_ARR_ARR_ARR(      ,             ,name,42,11,90     )
+EXAMPLE:Func(               Tag:name[42][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,         Tag:,name,42,11,MY_ENUM)
+EXAMPLE:Func(const              name[42][11][       ]); // EXAMPLE_ARR_ARR_ARR(const ,             ,name,42,11,       )
+EXAMPLE:Func(const          Tag:name[42][  ][     90]); // EXAMPLE_ARR_ARR_ARR(const ,         Tag:,name,42,  ,90     )
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,{Tag1, Tag2}:,name,42,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ][       ]); // EXAMPLE_ARR_ARR_ARR(const ,{Tag1, Tag2}:,name,42,  ,       )
+EXAMPLE:Func(                   name[  ][11][     90]); // EXAMPLE_ARR_ARR_ARR(      ,             ,name,  ,11,90     )
+EXAMPLE:Func(               Tag:name[  ][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,         Tag:,name,  ,11,MY_ENUM)
+EXAMPLE:Func(const              name[  ][11][       ]); // EXAMPLE_ARR_ARR_ARR(const ,             ,name,  ,11,       )
+EXAMPLE:Func(const          Tag:name[  ][  ][     90]); // EXAMPLE_ARR_ARR_ARR(const ,         Tag:,name,  ,  ,90     )
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,{Tag1, Tag2}:,name,  ,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ][       ]); // EXAMPLE_ARR_ARR_ARR(const ,{Tag1, Tag2}:,name,  ,  ,       )
+```
+
+### ARRAY_MULTI_TAGGROUP
+
+AKA **ARR_MUL_GRP**
+
+Detects multi-dimensional arrays with optional multiple tags.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,ARR_MUL_GRP:)(%0(%1))
+
+#define EXAMPLE_ARR_ARR(%0,(%1,%3),%2,%4,%5)%8$
+
+EXAMPLE:Func(                   name[42][11]); // EXAMPLE_ARR_ARR(,(     ,             ),name,42,11)
+EXAMPLE:Func(               Tag:name[42][11]); // EXAMPLE_ARR_ARR(,( Tag:,         Tag:),name,42,11)
+EXAMPLE:Func(const              name[42][11]); // ERROR
+EXAMPLE:Func(const          Tag:name[42][  ]); // ERROR
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(,(Tag1:,{Tag1, Tag2}:),name,42,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ]); // ERROR
+EXAMPLE:Func(                   name[  ][11]); // EXAMPLE_ARR_ARR(,(     ,             ),name,  ,11)
+EXAMPLE:Func(               Tag:name[  ][11]); // EXAMPLE_ARR_ARR(,( Tag:,         Tag:),name,  ,11)
+EXAMPLE:Func(const              name[  ][11]); // ERROR
+EXAMPLE:Func(const          Tag:name[  ][  ]); // ERROR
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(,(Tag1:,{Tag1, Tag2}:),name,  ,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ]); // ERROR
+
+#define EXAMPLE_ARR_ARR_ARR(%0,(%1,%3),%2,%4,%5,%6)%8$
+
+EXAMPLE:Func(                   name[42][11][     90]); // EXAMPLE_ARR_ARR_ARR(,(     ,             ),name,42,11,90     )
+EXAMPLE:Func(               Tag:name[42][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,( Tag:,         Tag:),name,42,11,MY_ENUM)
+EXAMPLE:Func(const              name[42][11][       ]); // ERROR
+EXAMPLE:Func(const          Tag:name[42][  ][     90]); // ERROR
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,(Tag1:,{Tag1, Tag2}:),name,42,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ][       ]); // ERROR
+EXAMPLE:Func(                   name[  ][11][     90]); // EXAMPLE_ARR_ARR_ARR(,(     ,             ),name,  ,11,90     )
+EXAMPLE:Func(               Tag:name[  ][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,( Tag:,         Tag:),name,  ,11,MY_ENUM)
+EXAMPLE:Func(const              name[  ][11][       ]); // ERROR
+EXAMPLE:Func(const          Tag:name[  ][  ][     90]); // ERROR
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(,(Tag1:,{Tag1, Tag2}:),name,  ,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ][       ]); // ERROR
+```
+
+### ARRAY_MULTI_CONST_TAGGROUP
+
+AKA **ARR_MUL_CST_GRP**
+
+Detects multi-dimensional arrays with optional `const`s and multiple tags.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,ARR_CST_GRP:)(%0(%1))
+
+#define EXAMPLE_ARR_ARR(%0,(%1,%3),%2,%4,%5)%8$
+
+EXAMPLE:Func(                   name[42][11]); // EXAMPLE_ARR_ARR(      ,(     ,              ),name,42,11)
+EXAMPLE:Func(               Tag:name[42][11]); // EXAMPLE_ARR_ARR(      ,( Tag:,          Tag:),name,42,11)
+EXAMPLE:Func(const              name[42][11]); // EXAMPLE_ARR_ARR(const ,(     ,              ),name,42,11)
+EXAMPLE:Func(const          Tag:name[42][  ]); // EXAMPLE_ARR_ARR(const ,( Tag:,          Tag:),name,42,  )
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(      ,(Tag1:, {Tag1, Tag2}:),name,42,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ]); // EXAMPLE_ARR_ARR(const ,(Tag1:, {Tag1, Tag2}:),name,42,  )
+EXAMPLE:Func(                   name[  ][11]); // EXAMPLE_ARR_ARR(      ,(     ,              ),name,  ,11)
+EXAMPLE:Func(               Tag:name[  ][11]); // EXAMPLE_ARR_ARR(      ,( Tag:,          Tag:),name,  ,11)
+EXAMPLE:Func(const              name[  ][11]); // EXAMPLE_ARR_ARR(const ,(     ,              ),name,  ,11)
+EXAMPLE:Func(const          Tag:name[  ][  ]); // EXAMPLE_ARR_ARR(const ,( Tag:,          Tag:),name,  ,  )
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(      ,(Tag1:, {Tag1, Tag2}:),name,  ,  )
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ]); // EXAMPLE_ARR_ARR(const ,(Tag1:, {Tag1, Tag2}:),name,  ,  )
+
+#define EXAMPLE_ARR_ARR_ARR(%0,(%1,%3),%2,%4,%5,%6)%8$
+
+EXAMPLE:Func(                   name[42][11][     90]); // EXAMPLE_ARR_ARR_ARR(      ,(     ,              ),name,42,11,90     )
+EXAMPLE:Func(               Tag:name[42][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,( Tag:,          Tag:),name,42,11,MY_ENUM)
+EXAMPLE:Func(const              name[42][11][       ]); // EXAMPLE_ARR_ARR_ARR(const ,(     ,              ),name,42,11,       )
+EXAMPLE:Func(const          Tag:name[42][  ][     90]); // EXAMPLE_ARR_ARR_ARR(const ,( Tag:,          Tag:),name,42,  ,90     )
+EXAMPLE:Func(      {Tag1, Tag2}:name[42][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,(Tag1:, {Tag1, Tag2}:),name,42,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[42][  ][       ]); // EXAMPLE_ARR_ARR_ARR(const ,(Tag1:, {Tag1, Tag2}:),name,42,  ,       )
+EXAMPLE:Func(                   name[  ][11][     90]); // EXAMPLE_ARR_ARR_ARR(      ,(     ,              ),name,  ,11,90     )
+EXAMPLE:Func(               Tag:name[  ][11][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,( Tag:,          Tag:),name,  ,11,MY_ENUM)
+EXAMPLE:Func(const              name[  ][11][       ]); // EXAMPLE_ARR_ARR_ARR(const ,(     ,              ),name,  ,11,       )
+EXAMPLE:Func(const          Tag:name[  ][  ][     90]); // EXAMPLE_ARR_ARR_ARR(const ,( Tag:,          Tag:),name,  ,  ,90     )
+EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR(      ,(Tag1:, {Tag1, Tag2}:),name,  ,  ,MY_ENUM)
+EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ][       ]); // EXAMPLE_ARR_ARR_ARR(const ,(Tag1:, {Tag1, Tag2}:),name,  ,  ,       )
+```
+
