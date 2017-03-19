@@ -2041,3 +2041,120 @@ EXAMPLE:Func(const {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (const ,(Tag1:, {Ta
 EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,(Tag1:, {Tag1, Tag2}:),name,7)
 ```
 
+### REFERENCE
+
+AKA **REF**
+
+Detects references.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,REF:)(%0(%1))
+
+#define EXAMPLE_REF(%0,%1,%2)%8$
+
+EXAMPLE:Func(&             name    ); // EXAMPLE_REF(,,             name    )
+EXAMPLE:Func(&         Tag:name    ); // EXAMPLE_REF(,,         Tag:name    )
+EXAMPLE:Func(&             name = 7); // EXAMPLE_REF(,,             name = 7)
+EXAMPLE:Func(&         Tag:name = 7); // EXAMPLE_REF(,,         Tag:name = 7)
+EXAMPLE:Func(&{Tag1, Tag2}:name    ); // EXAMPLE_REF(,,{Tag1, Tag2}:name    )
+EXAMPLE:Func(&{Tag1, Tag2}:name = 7); // EXAMPLE_REF(,,{Tag1, Tag2}:name = 7)
+```
+
+### REFERENCE_DEFAULT
+
+AKA **REF_DEF**
+
+Detects references with optional default values.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,REF_DEF:)(%0(%1))
+
+#define EXAMPLE_REF(%0,%1,%2,%4)%8$
+#define EXAMPLE_REF_DEF(%0,%1,%2,%4)%8$
+
+EXAMPLE:Func(&             name    ); // EXAMPLE_REF    (,,             name)
+EXAMPLE:Func(&         Tag:name    ); // EXAMPLE_REF    (,,         Tag:name)
+EXAMPLE:Func(&             name = 7); // EXAMPLE_REF_DEF(,,             name,7)
+EXAMPLE:Func(&         Tag:name = 7); // EXAMPLE_REF_DEF(,,         Tag:name,7)
+EXAMPLE:Func(&{Tag1, Tag2}:name    ); // EXAMPLE_REF    (,,{Tag1, Tag2}:name)
+EXAMPLE:Func(&{Tag1, Tag2}:name = 7); // EXAMPLE_REF_DEF(,,{Tag1, Tag2}:name,7)
+```
+
+### REFERENCE_TAG
+
+AKA **REF_TAG**
+
+Detects references with optional tags.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,REF_TAG:)(%0(%1))
+
+#define EXAMPLE_REF(%0,%1,%2)%8$
+
+EXAMPLE:Func(&             name    ); // EXAMPLE_REF(,             ,name    )
+EXAMPLE:Func(&         Tag:name    ); // EXAMPLE_REF(,         Tag:,name    )
+EXAMPLE:Func(&             name = 7); // EXAMPLE_REF(,             ,name = 7)
+EXAMPLE:Func(&         Tag:name = 7); // EXAMPLE_REF(,         Tag:,name = 7)
+EXAMPLE:Func(&{Tag1, Tag2}:name    ); // EXAMPLE_REF(,{Tag1, Tag2}:,name    )
+EXAMPLE:Func(&{Tag1, Tag2}:name = 7); // EXAMPLE_REF(,{Tag1, Tag2}:,name = 7)
+```
+
+### REFERENCE_DEFAULT_TAG
+
+AKA **REF_DEF_TAG**
+
+Detects references with optional default values and tags.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,REF_DEF_TAG:)(%0(%1))
+
+#define EXAMPLE_REF(%0,(%1,%3),%2)%8$
+#define EXAMPLE_REF_DEF(%0,%1,%2,%4)%8$
+
+EXAMPLE:Func(&             name    ); // EXAMPLE_REF    (,             ,name)
+EXAMPLE:Func(&         Tag:name    ); // EXAMPLE_REF    (,         Tag:,name)
+EXAMPLE:Func(&             name = 7); // EXAMPLE_REF_DEF(,             ,name,7)
+EXAMPLE:Func(&         Tag:name = 7); // EXAMPLE_REF_DEF(,         Tag:,name,7)
+EXAMPLE:Func(&{Tag1, Tag2}:name    ); // EXAMPLE_REF    (,{Tag1, Tag2}:,name)
+EXAMPLE:Func(&{Tag1, Tag2}:name = 7); // EXAMPLE_REF_DEF(,{Tag1, Tag2}:,name,7)
+```
+
+### REFERENCE_TAGGROUP
+
+AKA **REF_GRP**
+
+Detects references with optional multiple tags.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,REF_GRP:)(%0(%1))
+
+#define EXAMPLE_REF(%0,(%1,%3),%2)%8$
+
+EXAMPLE:Func(&             name    ); // EXAMPLE_REF(,(     ,             ),name    )
+EXAMPLE:Func(&         Tag:name    ); // EXAMPLE_REF(,( Tag:,         Tag:),name    )
+EXAMPLE:Func(&             name = 7); // EXAMPLE_REF(,(     ,             ),name = 7)
+EXAMPLE:Func(&         Tag:name = 7); // EXAMPLE_REF(,( Tag:,         Tag:),name = 7)
+EXAMPLE:Func(&{Tag1, Tag2}:name    ); // EXAMPLE_REF(,(Tag1:,{Tag1, Tag2}:),name    )
+EXAMPLE:Func(&{Tag1, Tag2}:name = 7); // EXAMPLE_REF(,(Tag1:,{Tag1, Tag2}:),name = 7)
+```
+
+### REFERENCE_DEFAULT_TAGGROUP
+
+AKA **REF_DEF_GRP**
+
+Detects references with optional default values and multiple tags.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,REF_DEF_GRP:)(%0(%1))
+
+#define EXAMPLE_REF(%0,(%1,%3),%2)%8$
+#define EXAMPLE_REF_DEF(%0,(%1,%3),%2,%4)%8$
+
+EXAMPLE:Func(&             name    ); // EXAMPLE_REF    (,(     ,              ),name)
+EXAMPLE:Func(&         Tag:name    ); // EXAMPLE_REF    (,( Tag:,          Tag:),name)
+EXAMPLE:Func(&             name = 7); // EXAMPLE_REF_DEF(,(     ,              ),name,7)
+EXAMPLE:Func(&         Tag:name = 7); // EXAMPLE_REF_DEF(,( Tag:,          Tag:),name,7)
+EXAMPLE:Func(&{Tag1, Tag2}:name    ); // EXAMPLE_REF    (,(Tag1:, {Tag1, Tag2}:),name)
+EXAMPLE:Func(&{Tag1, Tag2}:name = 7); // EXAMPLE_REF_DEF(,(Tag1:, {Tag1, Tag2}:),name,7)
+```
+
