@@ -2699,3 +2699,37 @@ EXAMPLE:Func(array[], length); // EXAMPLE_ARR(,,array,) EXAMPLE_NUM(,,length)
 EXAMPLE:Func(array[]        ); // ERROR
 ```
 
+### SPECIAL
+
+AKA **SPC**
+
+Detects special arrays (`Type:name<size>`s).
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,SPC:)(%0(%1))
+
+#define EXAMPLE_SPC(%0,%1,%2,%4)%8$
+
+EXAMPLE:Func(      Type:name<  >); // EXAMPLE_SPC(,Type:,      name,  )
+EXAMPLE:Func(      Type:name<10>); // EXAMPLE_SPC(,Type:,      name,10)
+EXAMPLE:Func(const Type:name<  >); // EXAMPLE_SPC(,Type:,const name,  )
+EXAMPLE:Func(const Type:name<10>); // EXAMPLE_SPC(,Type:,const name,10)
+```
+
+### SPECIAL_CONST
+
+AKA **SPC_CST**
+
+Detects special arrays (`Type:name<size>`s) with optional `const`s.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,SPC_CST:)(%0(%1))
+
+#define EXAMPLE_SPC(%0,%1,%2,%4)%8$
+
+EXAMPLE:Func(      Type:name<  >); // EXAMPLE_SPC(      ,Type:,name,  )
+EXAMPLE:Func(      Type:name<10>); // EXAMPLE_SPC(      ,Type:,name,10)
+EXAMPLE:Func(const Type:name<  >); // EXAMPLE_SPC(const ,Type:,name,  )
+EXAMPLE:Func(const Type:name<10>); // EXAMPLE_SPC(const ,Type:,name,10)
+```
+
