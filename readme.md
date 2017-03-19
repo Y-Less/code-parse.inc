@@ -1738,10 +1738,13 @@ direct comparison.
 
 ### NUMBER
 
-AKA **NUM**.
+AKA **NUM**
+
+Detects standard variables.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM:)(%0(%1))
+
 #define EXAMPLE_NUM(%0,%1,%2)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM(,,                   name    )
@@ -1760,10 +1763,13 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM(,,const {Tag1, Tag2}:n
 
 ### NUMBER_CONST
 
-AKA **NUM_CST**.
+AKA **NUM_CST**
+
+Detects standard variables with optional `const`s.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST:)(%0(%1))
+
 #define EXAMPLE_NUM(%0,%1,%2)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM(      ,,             name    )
@@ -1782,10 +1788,13 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM(const ,,{Tag1, Tag2}:n
 
 ### NUMBER_DEFAULT
 
-AKA **NUM_DEF**.
+AKA **NUM_DEF**
+
+Detects standard variables with optional default values.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_DEF:)(%0(%1))
+
 #define EXAMPLE_NUM(%0,%1,%2,%4)%8$
 #define EXAMPLE_NUM_DEF(%0,%1,%2,%4)%8$
 
@@ -1805,10 +1814,13 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,,const {Tag1, Tag
 
 ### NUMBER_CONST_DEFAULT
 
-AKA **NUM_CST_DEF**.
+AKA **NUM_CST_DEF**
+
+Detects standard variables with optional `const`s and default values.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST_DEF:)(%0(%1))
+
 #define EXAMPLE_NUM(%0,(%1,%3),%2)%8$
 #define EXAMPLE_NUM_DEF(%0,%1,%2,%4)%8$
 
@@ -1828,10 +1840,13 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,,{Tag1, Tag
 
 ### NUMBER_TAG
 
-AKA **NUM_TAG**.
+AKA **NUM_TAG**
+
+Detects standard variables with optional tags.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_TAG:)(%0(%1))
+
 #define EXAMPLE_NUM(%0,%1,%2)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM(,                   ,name    )
@@ -1850,10 +1865,13 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM(,const {Tag1, Tag2}:,n
 
 ### NUMBER_CONST_TAG
 
-AKA **NUM_CST_TAG**.
+AKA **NUM_CST_TAG**
+
+Detects standard variables with optional `const`s and tags.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST_TAG:)(%0(%1))
+
 #define EXAMPLE_NUM(%0,%1,%2)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM(      ,             ,name    )
@@ -1872,10 +1890,13 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM(const ,{Tag1, Tag2}:,n
 
 ### NUMBER_DEFAULT_TAG
 
-AKA **NUM_DEF_TAG**.
+AKA **NUM_DEF_TAG**
+
+Detects standard variables with optional default values and tags.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_DEF_TAG:)(%0(%1))
+
 #define EXAMPLE_NUM(%0,(%1,%3),%2)%8$
 #define EXAMPLE_NUM_DEF(%0,%1,%2,%4)%8$
 
@@ -1895,10 +1916,13 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,const {Tag1, Tag2
 
 ### NUMBER_CONST_DEFAULT_TAG
 
-AKA **NUM_CST_DEF_TAG**.
+AKA **NUM_CST_DEF_TAG**
+
+Detects standard variables with optional `const`s, default values, and tags.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST_DEF_TAG:)(%0(%1))
+
 #define EXAMPLE_NUM_DEF(%0,%1,%2,%4)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM    (      ,             ,name)
@@ -1917,11 +1941,14 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,{Tag1, Tag2
 
 ### NUMBER_TAGGROUP
 
-AKA **NUM_GRP**.
+AKA **NUM_GRP**
+
+Detects standard variables with optional multiple tags.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_GRP:)(%0(%1))
-#define EXAMPLE_NUM(%0,%1,%2)%8$
+
+#define EXAMPLE_NUM(%0,(%1,%3),%2)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM(,(     ,             ),name    )
 EXAMPLE:Func(               Tag:name    ); // EXAMPLE_NUM(,( Tag:,         Tag:),name    )
@@ -1939,11 +1966,14 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // ERROR
 
 ### NUMBER_CONST_TAGGROUP
 
-AKA **NUM_CST_GRP**.
+AKA **NUM_CST_GRP**
+
+Detects standard variables with optional `const`s and multiple tags.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST_GRP:)(%0(%1))
-#define EXAMPLE_NUM(%0,%1,%2)%8$
+
+#define EXAMPLE_NUM(%0,(%1,%3),%2)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM(      ,(     ,              ),name    )
 EXAMPLE:Func(               Tag:name    ); // EXAMPLE_NUM(      ,( Tag:,          Tag:),name    )
@@ -1961,10 +1991,13 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM(const ,(Tag1:, {Tag1, 
 
 ### NUMBER_DEFAULT_TAGGROUP
 
-AKA **NUM_DEF_GRP**.
+AKA **NUM_DEF_GRP**
+
+Detects standard variables with optional default values and multiple tags.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_DEF_GRP:)(%0(%1))
+
 #define EXAMPLE_NUM(%0,(%1,%3),%2)%8$
 #define EXAMPLE_NUM_DEF(%0,(%1,%3),%2,%4)%8$
 
@@ -1984,10 +2017,13 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // ERROR
 
 ### NUMBER_CONST_DEFAULT_TAGGROUP
 
-AKA **NUM_CST_DEF_GRP**.
+AKA **NUM_CST_DEF_GRP**
+
+Detects standard variables with optional `const`s, default values, and multiple tags.
 
 ```pawn
 #define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST_DEF_GRP:)(%0(%1))
+
 #define EXAMPLE_NUM(%0,(%1,%3),%2)%8$
 #define EXAMPLE_NUM_DEF(%0,(%1,%3),%2,%4)%8$
 
