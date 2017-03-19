@@ -2244,3 +2244,51 @@ EXAMPLE:Func(const string:name[  ] = "hi"); // EXAMPLE_STR_DEF(const ,,name,  ,"
 EXAMPLE:Func(const string:name[32] = "hi"); // EXAMPLE_STR_DEF(const ,,name,32,"hi")
 ```
 
+### VARARG
+
+AKA **EXT**
+
+Detects varargs.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,EXT:)(%0(%1))
+
+#define EXAMPLE_EXT(%0,%1,%2)%8$
+
+EXAMPLE:Func(             ...); // EXAMPLE_EXT(,,             )
+EXAMPLE:Func(         Tag:...); // EXAMPLE_EXT(,,         Tag:)
+EXAMPLE:Func({Tag1, Tag2}:...); // EXAMPLE_EXT(,,{Tag1, Tag2}:)
+```
+
+### VARARG_TAG
+
+AKA **EXT_TAG**
+
+Detects varargs with optional tags.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,EXT_TAG:)(%0(%1))
+
+#define EXAMPLE_EXT(%0,%1,%2)%8$
+
+EXAMPLE:Func(             ...); // EXAMPLE_EXT(,             ,)
+EXAMPLE:Func(         Tag:...); // EXAMPLE_EXT(,         Tag:,)
+EXAMPLE:Func({Tag1, Tag2}:...); // EXAMPLE_EXT(,{Tag1, Tag2}:,)
+```
+
+### VARARG_TAGGROUP
+
+AKA **EXT_GRP**
+
+Detects varargs with optional multiple tags.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,EXT_GRP:)(%0(%1))
+
+#define EXAMPLE_EXT(%0,(%1,%3),%2)%8$
+
+EXAMPLE:Func(             ...); // EXAMPLE_EXT(,(     ,             ),)
+EXAMPLE:Func(         Tag:...); // EXAMPLE_EXT(,( Tag:,         Tag:),)
+EXAMPLE:Func({Tag1, Tag2}:...); // EXAMPLE_EXT(,(Tag1:,{Tag1, Tag2}:),)
+```
+
