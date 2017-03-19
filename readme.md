@@ -35,6 +35,18 @@
 * [API](#api)
 * [Example 8 - y_inline](#example-8---y_inline)
 * [Complete Reference](#complete-reference)
+  * [NUMBER](#number)
+  * [NUMBER_CONST](#number_const)
+  * [NUMBER_DEFAULT](#number_default)
+  * [NUMBER_CONST_DEFAULT](#number_const_default)
+  * [NUMBER_TAG](#number_tag)
+  * [NUMBER_CONST_TAG](#number_const_tag)
+  * [NUMBER_DEFAULT_TAG](#number_default_tag)
+  * [NUMBER_CONST_DEFAULT_TAG](#number_const_default_tag)
+  * [NUMBER_TAGGROUP](#number_taggroup)
+  * [NUMBER_CONST_TAGGROUP](#number_const_taggroup)
+  * [NUMBER_DEFAULT_TAGGROUP](#number_default_taggroup)
+  * [NUMBER_CONST_DEFAULT_TAGGROUP](#number_const_default_taggroup)
 
 ## Introduction
 
@@ -1779,16 +1791,16 @@ AKA **NUM_DEF**.
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM    (,,                   name)
 EXAMPLE:Func(               Tag:name    ); // EXAMPLE_NUM    (,,               Tag:name)
-EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(,,                   name, 7)
-EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(,,               Tag:name, 7)
+EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(,,                   name,7)
+EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(,,               Tag:name,7)
 EXAMPLE:Func(const              name    ); // EXAMPLE_NUM    (,,const              name)
 EXAMPLE:Func(const          Tag:name    ); // EXAMPLE_NUM    (,,const          Tag:name)
-EXAMPLE:Func(const              name = 7); // EXAMPLE_NUM_DEF(,,const              name, 7)
-EXAMPLE:Func(const          Tag:name = 7); // EXAMPLE_NUM_DEF(,,const          Tag:name, 7)
+EXAMPLE:Func(const              name = 7); // EXAMPLE_NUM_DEF(,,const              name,7)
+EXAMPLE:Func(const          Tag:name = 7); // EXAMPLE_NUM_DEF(,,const          Tag:name,7)
 EXAMPLE:Func(      {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (,,      {Tag1, Tag2}:name)
-EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,,      {Tag1, Tag2}:name, 7)
+EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,,      {Tag1, Tag2}:name,7)
 EXAMPLE:Func(const {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (,,const {Tag1, Tag2}:name)
-EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,,const {Tag1, Tag2}:name, 7)
+EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,,const {Tag1, Tag2}:name,7)
 ```
 
 ### NUMBER_CONST_DEFAULT
@@ -1802,16 +1814,16 @@ AKA **NUM_CST_DEF**.
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM    (      ,,             name)
 EXAMPLE:Func(               Tag:name    ); // EXAMPLE_NUM    (      ,,         Tag:name)
-EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(      ,,             name, 7)
-EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(      ,,         Tag:name, 7)
+EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(      ,,             name,7)
+EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(      ,,         Tag:name,7)
 EXAMPLE:Func(const              name    ); // EXAMPLE_NUM    (const ,,             name)
 EXAMPLE:Func(const          Tag:name    ); // EXAMPLE_NUM    (const ,,         Tag:name)
-EXAMPLE:Func(const              name = 7); // EXAMPLE_NUM_DEF(const ,,             name, 7)
-EXAMPLE:Func(const          Tag:name = 7); // EXAMPLE_NUM_DEF(const ,,         Tag:name, 7)
+EXAMPLE:Func(const              name = 7); // EXAMPLE_NUM_DEF(const ,,             name,7)
+EXAMPLE:Func(const          Tag:name = 7); // EXAMPLE_NUM_DEF(const ,,         Tag:name,7)
 EXAMPLE:Func(      {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (      ,,{Tag1, Tag2}:name)
-EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(      ,,{Tag1, Tag2}:name, 7)
+EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(      ,,{Tag1, Tag2}:name,7)
 EXAMPLE:Func(const {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (const ,,{Tag1, Tag2}:name)
-EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,,{Tag1, Tag2}:name, 7)
+EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,,{Tag1, Tag2}:name,7)
 ```
 
 ### NUMBER_TAG
@@ -1869,16 +1881,16 @@ AKA **NUM_DEF_TAG**.
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM    (,                   ,name)
 EXAMPLE:Func(               Tag:name    ); // EXAMPLE_NUM    (,               Tag:,name)
-EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(,                   ,name, 7)
-EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(,               Tag:,name, 7)
+EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(,                   ,name,7)
+EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(,               Tag:,name,7)
 EXAMPLE:Func(const              name    ); // EXAMPLE_NUM    (,const              ,name)
 EXAMPLE:Func(const          Tag:name    ); // EXAMPLE_NUM    (,const          Tag:,name)
-EXAMPLE:Func(const              name = 7); // EXAMPLE_NUM_DEF(,const              ,name, 7)
-EXAMPLE:Func(const          Tag:name = 7); // EXAMPLE_NUM_DEF(,const          Tag:,name, 7)
+EXAMPLE:Func(const              name = 7); // EXAMPLE_NUM_DEF(,const              ,name,7)
+EXAMPLE:Func(const          Tag:name = 7); // EXAMPLE_NUM_DEF(,const          Tag:,name,7)
 EXAMPLE:Func(      {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (,      {Tag1, Tag2}:,name)
-EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,      {Tag1, Tag2}:,name, 7)
+EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,      {Tag1, Tag2}:,name,7)
 EXAMPLE:Func(const {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (,const {Tag1, Tag2}:,name)
-EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,const {Tag1, Tag2}:,name, 7)
+EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,const {Tag1, Tag2}:,name,7)
 ```
 
 ### NUMBER_CONST_DEFAULT_TAG
@@ -1891,16 +1903,16 @@ AKA **NUM_CST_DEF_TAG**.
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM    (      ,             ,name)
 EXAMPLE:Func(               Tag:name    ); // EXAMPLE_NUM    (      ,         Tag:,name)
-EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(      ,             ,name, 7)
-EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(      ,         Tag:,name, 7)
+EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(      ,             ,name,7)
+EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(      ,         Tag:,name,7)
 EXAMPLE:Func(const              name    ); // EXAMPLE_NUM    (const ,             ,name)
 EXAMPLE:Func(const          Tag:name    ); // EXAMPLE_NUM    (const ,         Tag:,name)
-EXAMPLE:Func(const              name = 7); // EXAMPLE_NUM_DEF(const ,             ,name, 7)
-EXAMPLE:Func(const          Tag:name = 7); // EXAMPLE_NUM_DEF(const ,         Tag:,name, 7)
+EXAMPLE:Func(const              name = 7); // EXAMPLE_NUM_DEF(const ,             ,name,7)
+EXAMPLE:Func(const          Tag:name = 7); // EXAMPLE_NUM_DEF(const ,         Tag:,name,7)
 EXAMPLE:Func(      {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (      ,{Tag1, Tag2}:,name)
-EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(      ,{Tag1, Tag2}:,name, 7)
+EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(      ,{Tag1, Tag2}:,name,7)
 EXAMPLE:Func(const {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (const ,{Tag1, Tag2}:,name)
-EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,{Tag1, Tag2}:,name, 7)
+EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,{Tag1, Tag2}:,name,7)
 ```
 
 ### NUMBER_TAGGROUP
@@ -1958,14 +1970,14 @@ AKA **NUM_DEF_GRP**.
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM    (,(     ,              ),name)
 EXAMPLE:Func(               Tag:name    ); // EXAMPLE_NUM    (,( Tag:,          Tag:),name)
-EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(,(     ,              ),name, 7)
-EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(,( Tag:,          Tag:),name, 7)
+EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(,(     ,              ),name,7)
+EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(,( Tag:,          Tag:),name,7)
 EXAMPLE:Func(const              name    ); // ERROR
 EXAMPLE:Func(const          Tag:name    ); // ERROR
 EXAMPLE:Func(const              name = 7); // ERROR
 EXAMPLE:Func(const          Tag:name = 7); // ERROR
 EXAMPLE:Func(      {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (,(Tag1:, {Tag1, Tag2}:),name)
-EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,(Tag1:, {Tag1, Tag2}:),name, 7)
+EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,(Tag1:, {Tag1, Tag2}:),name,7)
 EXAMPLE:Func(const {Tag1, Tag2}:name    ); // ERROR
 EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // ERROR
 ```
@@ -1981,15 +1993,15 @@ AKA **NUM_CST_DEF_GRP**.
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM    (      ,(     ,              ),name)
 EXAMPLE:Func(               Tag:name    ); // EXAMPLE_NUM    (      ,( Tag:,          Tag:),name)
-EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(      ,(     ,              ),name, 7)
-EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(      ,( Tag:,          Tag:),name, 7)
+EXAMPLE:Func(                   name = 7); // EXAMPLE_NUM_DEF(      ,(     ,              ),name,7)
+EXAMPLE:Func(               Tag:name = 7); // EXAMPLE_NUM_DEF(      ,( Tag:,          Tag:),name,7)
 EXAMPLE:Func(const              name    ); // EXAMPLE_NUM    (const ,(     ,              ),name)
 EXAMPLE:Func(const          Tag:name    ); // EXAMPLE_NUM    (const ,( Tag:,          Tag:),name)
-EXAMPLE:Func(const              name = 7); // EXAMPLE_NUM_DEF(const ,(     ,              ),name, 7)
-EXAMPLE:Func(const          Tag:name = 7); // EXAMPLE_NUM_DEF(const ,( Tag:,          Tag:),name, 7)
+EXAMPLE:Func(const              name = 7); // EXAMPLE_NUM_DEF(const ,(     ,              ),name,7)
+EXAMPLE:Func(const          Tag:name = 7); // EXAMPLE_NUM_DEF(const ,( Tag:,          Tag:),name,7)
 EXAMPLE:Func(      {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (      ,(Tag1:, {Tag1, Tag2}:),name)
-EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(      ,(Tag1:, {Tag1, Tag2}:),name, 7)
+EXAMPLE:Func(      {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(      ,(Tag1:, {Tag1, Tag2}:),name,7)
 EXAMPLE:Func(const {Tag1, Tag2}:name    ); // EXAMPLE_NUM    (const ,(Tag1:, {Tag1, Tag2}:),name)
-EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,(Tag1:, {Tag1, Tag2}:),name, 7)
+EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,(Tag1:, {Tag1, Tag2}:),name,7)
 ```
 
