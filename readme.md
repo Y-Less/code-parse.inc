@@ -2682,3 +2682,20 @@ EXAMPLE:Func(      {Tag1, Tag2}:name[  ][  ][MY_ENUM]); // EXAMPLE_ARR_ARR_ARR( 
 EXAMPLE:Func(const {Tag1, Tag2}:name[  ][  ][       ]); // EXAMPLE_ARR_ARR_ARR(const ,(Tag1:, {Tag1, Tag2}:),name,  ,  ,       )
 ```
 
+## LENGTH
+
+AKA **LEN**
+
+Enforces length variables appearing after arrays.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,ARR:NUM:LEN:)(%0(%1))
+
+#define EXAMPLE_ARR(%0,%1,%2,%4)%8$
+#define EXAMPLE_NUM(%0,%1,%2)%8$
+
+EXAMPLE:Func(         length); // EXAMPLE_NUM(,,length)
+EXAMPLE:Func(array[], length); // EXAMPLE_ARR(,,array,) EXAMPLE_NUM(,,length)
+EXAMPLE:Func(array[]        ); // ERROR
+```
+
