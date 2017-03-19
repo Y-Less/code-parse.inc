@@ -3073,6 +3073,9 @@ Used to detect function qualifiers before endings are performed.
 #define EXAMPLE_NUM(%0,%1,%2)%8$
 #define EXAMPLE_NUL(%0)%8$
 #define EXAMPLE_stock()%8$
+#define EXAMPLE_static()%8$
+#define EXAMPLE_global()%8$
+#define EXAMPLE_operator()%8$
 
 EXAMPLE:             Func(); //                                     EXAMPLE_NUL(Func)
 EXAMPLE:stock        Func(); // EXAMPLE_stock()                     EXAMPLE_NUL(Func)
