@@ -30,6 +30,8 @@
 * [LEN (LENGTH)](#len-length)
 * [QAL (QUALIFICATION)](#qal-qualification)
 * [SPC (SPECIAL)](#spc-special)
+* [GRP (TAGGROUP)](#grp-taggroup)
+  * [Alternate Rebuild](#alternate-rebuild)
 * [API](#api)
 * [Example 8 - y_inline](#example-8---y_inline)
 
@@ -1396,6 +1398,153 @@ MY_PARSER:func(Iterator:Vehicles<MAX_PLAYERS, MAX_VEHICLES>)
 
 will be interpreted as two invalid parameters - `Iterator:Vehicles<MAX_PLAYERS`
 and `MAX_VEHICLES>` instead of what it should be.
+
+## GRP (TAGGROUP)
+
+Tag groups are multiple tags assigned to the same variable, most frequently seen
+as:
+
+```pawn
+Func1({_, Float}:...)
+{
+}
+```
+
+However, any variable can have any tag groups on them:
+
+```pawn
+Func2({_, Float}:a, &{bool, File, DB}:b, {Text, PlayerText}:tds[])
+{
+}
+```
+
+Calling `tagof` on these variables at the function site will return the first
+tag from the list (at the call site, it will always return the correct declared
+tag).  This makes the first tag the most important tag:
+
+```pawn
+Func3({Text, PlayerText}:td, tag = tagof (td))
+{
+	return (tag == tagof (Text:));
+}
+
+main()
+{
+	new
+		Text:a,
+		PlayerText:b;
+	Func3(a);            // true
+	Func3(a, tagof (a)); // true
+	Func3(b);            // true
+	Func3(b, tagof (b)); // false
+}
+```
+
+Tag groups cannot be used as tag overrides and will give an error:
+
+```pawn
+main()
+{
+	new
+		Float:a;
+	Func3({Text, PlayerText}:a); // Error
+	Func3(Text:a);               // OK
+}
+```
+
+For this reason it is important to be able to detect tag groups, and provide a
+method for getting the correct values to tag override with.  `_GRP` or
+`_TAGGROUP`, when used in place of `_TAG`, provides this:
+
+
+With `_TAG`:
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUL_TAG:)(%0(%1))
+#define EXAMPLE_NUL(%0,%1,%2)%8$ "The tag is " #%1
+
+EXAMPLE:Func(a:v);         // The tag is a:
+EXAMPLE:Func({a, b, c}:v); // The tag is {a, b, c}:
+```
+
+With `_GRP`, both the whole tag group and the first tag (for overriding) are
+provided.  To keep backwards-compatability with the existing macro parameters,
+they are BOTH given in `%1` when `_GRP` is used instead - even if there is no
+tag group:
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUL_GRP:)(%0(%1))
+#define EXAMPLE_NUL(%0,(%1,%3),%2)%8$ "The main is " #%1 ", the group is: " %3
+
+EXAMPLE:Func(a:v);         // The main is a:, the group is a:
+EXAMPLE:Func({a, b, c}:v); // The main is a:, the group is {a, b, c}:
+```
+
+Note that this new sub-parameter code is on a per-type basis:
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUL_GRP:REF_TAG:ARR_GRP:EXT_TAG:)(%0(%1))
+#define EXAMPLE_NUL(%0,(%1,%3),%2) // Correct.
+#define EXAMPLE_REF(%0,%1,%2)      // Correct.
+#define EXAMPLE_ARR(%0,%1,%2)      // Acceptable (ignores the sub-parameters).
+#define EXAMPLE_EXT(%0,(%1,%3),%2) // Wrong (sub-parameters not expected).
+```
+
+For easy macro parameter management, if you only need the whole tag (but why are
+you not just using `_TAG`) use `(%0,(%1,%1),%2)`.  If you only want the main tag
+use `(%0,(%1,%2),%2)`.  Macro parameters can appear more than once in the search
+string and the old value will be replaced with the new one, so in both those
+cases the value you don't need will be replaced with something else.
+
+### Alternate Rebuild
+
+An alternate version of the `REBUILD:` example using `_GRP` instead of `_TAG`
+and with many examples you can inspect using `-l` to compile:
+
+```pawn
+#define REBUILD:%0(%1) FUNC_PARSER(REBUILD,ARR_MUL_GRP_CST:NUM_GRP_CST_DEF:REF_GRP_DEF:EXT_GRP:STR_CST_DEF:SPC_CST:)(%0(%1))%0($)
+
+#define REBUILD_NUM(%0,(%1,%1),%2)%8$%7(%9$)                         %8$%7(%9, %0 %1%2                $)
+#define REBUILD_NUM_DEF(%0,(%1,%1),%2,%4)%8$%7(%9$)                  %8$%7(%9, %0 %1%2     = %4       $)
+#define REBUILD_REF(,(%1,%1),%2)%8$%7(%9$)                           %8$%7(%9,  & %1%2                $)
+#define REBUILD_REF_DEF(,(%1,%1),%2,%4)%8$%7(%9$)                    %8$%7(%9,  & %1%2     = %4       $)
+#define REBUILD_EXT(,(%1,%1),)%8$%7(%9$)                             %8$%7(%9,    %1...               $)
+#define REBUILD_STR(%0,,%2,%3)%8$%7(%9$)                        %8$%7(%9, %0   %2[%3]            $)
+#define REBUILD_STR_DEF(%0,,%2,%3,%4)%8$%7(%9$)                 %8$%7(%9, %0   %2[%3] = %4       $)
+#define REBUILD_SPC(%0,%1,%2,%3)%8$%7(%9$)                      %8$%7(%9, %0 %1%2<%3>            $)
+#define REBUILD_ARR(%0,(%1,%1),%2,%3)%8$%7(%9$)                      %8$%7(%9, %0 %1%2[%3]            $)
+#define REBUILD_ARR_ARR(%0,(%1,%1),%2,%3,%4)%8$%7(%9$)               %8$%7(%9, %0 %1%2[%3][%4]        $)
+#define REBUILD_ARR_ARR_ARR(%0,(%1,%1),%2,%3,%4,%5)%8$%7(%9$)        %8$%7(%9, %0 %1%2[%3][%4][%5]    $)
+#define REBUILD_ARR_ARR_ARR_ARR(%0,(%1,%1),%2,%3,%4,%5,%6)%8$%7(%9$) %8$%7(%9, %0 %1%2[%3][%4][%5][%6]$)
+
+#define REBUILD_END(%9)%8$%7(,%9$) %8$%7(%9)
+#define REBUILD_NUL(%9)%8$%7($)    %8$%7()
+
+#define REBUILD_static(%9)%8$ %8$B
+
+#define iter_%0\32; iter_
+#define Example:%0<> iter_%0[10]
+
+REBUILD:stock static rebuilt_func_1(a, c, b[]);
+REBUILD:stock static rebuilt_func_2(a, &c, string:b[] = "");
+REBUILD:stock static rebuilt_func_3(Text:a, c, b[]);
+REBUILD:stock static rebuilt_func_4(Text:a, &c, const b[]);
+REBUILD:stock rebuilt_func_5(Text:a, c, b[]);
+REBUILD:stock rebuilt_func_6(a, &c, const b[6][7]);
+REBUILD:stock rebuilt_func_7(a, c, b[]);
+REBUILD:stock rebuilt_func_8(const a, b[], &Float:c = 66.4);
+REBUILD:stock rebuilt_func_9(const Float:a, c, b[]);
+REBUILD:public rebuilt_func_a(const Float:a, c, b[]);
+REBUILD:public rebuilt_func_0(const Float:a, &c, b[]);
+REBUILD:forward rebuilt_func_b(const a, b[], &c = 6);
+REBUILD:rebuilt_func_c(const a, string:f[] = "hi", ...);
+REBUILD:rebuilt_func_d(const a, c, {Float, _, Text}:...);
+REBUILD:public rebuilt_func(a, c, b[]);
+REBUILD:rebuilt_func_e(const a, c, Example:Player<>);
+REBUILD:rebuilt_func_e(const a, c, Example:Player<>);
+REBUILD:rebuilt_func_f(const Example:A<>, Example:Vehicle<>);
+REBUILD:rebuilt_func_g(&{Tag1, Tag2}:a, {Float, Fake}:c);
+```
 
 ## API
 
