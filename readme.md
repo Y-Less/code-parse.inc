@@ -2158,3 +2158,89 @@ EXAMPLE:Func(&{Tag1, Tag2}:name    ); // EXAMPLE_REF    (,(Tag1:, {Tag1, Tag2}:)
 EXAMPLE:Func(&{Tag1, Tag2}:name = 7); // EXAMPLE_REF_DEF(,(Tag1:, {Tag1, Tag2}:),name,7)
 ```
 
+### STRING
+
+AKA **STR**
+
+Detects strings (`string:` only).
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,STR:)(%0(%1))
+
+#define EXAMPLE_STR(%0,%1,%2,%3)%8$
+
+EXAMPLE:Func(      string:name[  ]       ); // EXAMPLE_STR(,,      name       ,  )
+EXAMPLE:Func(      string:name[32]       ); // EXAMPLE_STR(,,      name       ,32)
+EXAMPLE:Func(      string:name[  ] = "hi"); // EXAMPLE_STR(,,      name = "hi",  )
+EXAMPLE:Func(      string:name[32] = "hi"); // EXAMPLE_STR(,,      name = "hi",32)
+EXAMPLE:Func(const string:name[  ]       ); // EXAMPLE_STR(,,const name       ,  )
+EXAMPLE:Func(const string:name[32]       ); // EXAMPLE_STR(,,const name       ,32)
+EXAMPLE:Func(const string:name[  ] = "hi"); // EXAMPLE_STR(,,const name = "hi",  )
+EXAMPLE:Func(const string:name[32] = "hi"); // EXAMPLE_STR(,,const name = "hi",32)
+```
+
+### STRING_CONST
+
+AKA **STR_CST**
+
+Detects strings (`string:` only) with optional `const`s.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,STR_CST:)(%0(%1))
+
+#define EXAMPLE_STR(%0,%1,%2,%3)%8$
+
+EXAMPLE:Func(      string:name[  ]       ); // EXAMPLE_STR(      ,,name       ,  )
+EXAMPLE:Func(      string:name[32]       ); // EXAMPLE_STR(      ,,name       ,32)
+EXAMPLE:Func(      string:name[  ] = "hi"); // EXAMPLE_STR(      ,,name = "hi",  )
+EXAMPLE:Func(      string:name[32] = "hi"); // EXAMPLE_STR(      ,,name = "hi",32)
+EXAMPLE:Func(const string:name[  ]       ); // EXAMPLE_STR(const ,,name       ,  )
+EXAMPLE:Func(const string:name[32]       ); // EXAMPLE_STR(const ,,name       ,32)
+EXAMPLE:Func(const string:name[  ] = "hi"); // EXAMPLE_STR(const ,,name = "hi",  )
+EXAMPLE:Func(const string:name[32] = "hi"); // EXAMPLE_STR(const ,,name = "hi",32)
+```
+
+### STRING_DEFAULT
+
+AKA **STR_DEF**
+
+Detects strings (`string:` only) with optional default values.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,STR_DEF:)(%0(%1))
+
+#define EXAMPLE_STR(%0,%1,%2,%3)%8$
+#define EXAMPLE_STR_DEF(%0,%1,%2,%3,%4)%8$
+
+EXAMPLE:Func(      string:name[  ]       ); // EXAMPLE_STR    (,,      name,  ,    )
+EXAMPLE:Func(      string:name[32]       ); // EXAMPLE_STR    (,,      name,32,    )
+EXAMPLE:Func(      string:name[  ] = "hi"); // EXAMPLE_STR_DEF(,,      name,  ,"hi")
+EXAMPLE:Func(      string:name[32] = "hi"); // EXAMPLE_STR_DEF(,,      name,32,"hi")
+EXAMPLE:Func(const string:name[  ]       ); // EXAMPLE_STR    (,,const name,  ,    )
+EXAMPLE:Func(const string:name[32]       ); // EXAMPLE_STR    (,,const name,32,    )
+EXAMPLE:Func(const string:name[  ] = "hi"); // EXAMPLE_STR_DEF(,,const name,  ,"hi")
+EXAMPLE:Func(const string:name[32] = "hi"); // EXAMPLE_STR_DEF(,,const name,32,"hi")
+```
+
+### STRING_CONST_DEFAULT
+
+AKA **STR_CST_DEF**
+
+Detects strings (`string:` only) with optional `const`s and default values.
+
+```pawn
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,STR_CST_DEF:)(%0(%1))
+
+#define EXAMPLE_STR(%0,%1,%2,%3)%8$
+#define EXAMPLE_STR_DEF(%0,%1,%2,%3,%4)%8$
+
+EXAMPLE:Func(      string:name[  ]       ); // EXAMPLE_STR    (      ,,name,  ,    )
+EXAMPLE:Func(      string:name[32]       ); // EXAMPLE_STR    (      ,,name,32,    )
+EXAMPLE:Func(      string:name[  ] = "hi"); // EXAMPLE_STR_DEF(      ,,name,  ,"hi")
+EXAMPLE:Func(      string:name[32] = "hi"); // EXAMPLE_STR_DEF(      ,,name,32,"hi")
+EXAMPLE:Func(const string:name[  ]       ); // EXAMPLE_STR    (const ,,name,  ,    )
+EXAMPLE:Func(const string:name[32]       ); // EXAMPLE_STR    (const ,,name,32,    )
+EXAMPLE:Func(const string:name[  ] = "hi"); // EXAMPLE_STR_DEF(const ,,name,  ,"hi")
+EXAMPLE:Func(const string:name[32] = "hi"); // EXAMPLE_STR_DEF(const ,,name,32,"hi")
+```
+
