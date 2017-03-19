@@ -1808,7 +1808,7 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,,const {Tag1, Tag
 AKA **NUM_CST_DEF**.
 
 ```pawn
-#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM:)(%0(%1))
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST_DEF:)(%0(%1))
 #define EXAMPLE_NUM(%0,(%1,%3),%2)%8$
 #define EXAMPLE_NUM_DEF(%0,%1,%2,%4)%8$
 
@@ -1831,7 +1831,7 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,,{Tag1, Tag
 AKA **NUM_TAG**.
 
 ```pawn
-#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM:)(%0(%1))
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_TAG:)(%0(%1))
 #define EXAMPLE_NUM(%0,%1,%2)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM(,                   ,name    )
@@ -1853,7 +1853,7 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM(,const {Tag1, Tag2}:,n
 AKA **NUM_CST_TAG**.
 
 ```pawn
-#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM:)(%0(%1))
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST_TAG:)(%0(%1))
 #define EXAMPLE_NUM(%0,%1,%2)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM(      ,             ,name    )
@@ -1875,7 +1875,7 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM(const ,{Tag1, Tag2}:,n
 AKA **NUM_DEF_TAG**.
 
 ```pawn
-#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM:)(%0(%1))
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_DEF_TAG:)(%0(%1))
 #define EXAMPLE_NUM(%0,(%1,%3),%2)%8$
 #define EXAMPLE_NUM_DEF(%0,%1,%2,%4)%8$
 
@@ -1898,7 +1898,7 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(,const {Tag1, Tag2
 AKA **NUM_CST_DEF_TAG**.
 
 ```pawn
-#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM:)(%0(%1))
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST_DEF_TAG:)(%0(%1))
 #define EXAMPLE_NUM_DEF(%0,%1,%2,%4)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM    (      ,             ,name)
@@ -1920,7 +1920,7 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM_DEF(const ,{Tag1, Tag2
 AKA **NUM_GRP**.
 
 ```pawn
-#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM:)(%0(%1))
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_GRP:)(%0(%1))
 #define EXAMPLE_NUM(%0,%1,%2)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM(,(     ,             ),name    )
@@ -1942,7 +1942,7 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // ERROR
 AKA **NUM_CST_GRP**.
 
 ```pawn
-#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM:)(%0(%1))
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST_GRP:)(%0(%1))
 #define EXAMPLE_NUM(%0,%1,%2)%8$
 
 EXAMPLE:Func(                   name    ); // EXAMPLE_NUM(      ,(     ,              ),name    )
@@ -1964,7 +1964,7 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // EXAMPLE_NUM(const ,(Tag1:, {Tag1, 
 AKA **NUM_DEF_GRP**.
 
 ```pawn
-#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM:)(%0(%1))
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_DEF_GRP:)(%0(%1))
 #define EXAMPLE_NUM(%0,(%1,%3),%2)%8$
 #define EXAMPLE_NUM_DEF(%0,(%1,%3),%2,%4)%8$
 
@@ -1987,7 +1987,7 @@ EXAMPLE:Func(const {Tag1, Tag2}:name = 7); // ERROR
 AKA **NUM_CST_DEF_GRP**.
 
 ```pawn
-#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM:)(%0(%1))
+#define EXAMPLE:%0(%1) FUNC_PARSER(EXAMPLE,NUM_CST_DEF_GRP:)(%0(%1))
 #define EXAMPLE_NUM(%0,(%1,%3),%2)%8$
 #define EXAMPLE_NUM_DEF(%0,(%1,%3),%2,%4)%8$
 
