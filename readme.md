@@ -1685,7 +1685,7 @@ In to:
 ```pawn
 main()
 {
-	static  InlineFunc[_:I@E:32]=# InlineFunc":....";if(I@E(_:@Ia:@Ib:@Ic:@Ib:@Ic:@Id: InlineFunc))for(new a, b[_:@Iy:32], c[_:(130)];I@F();)while(I@L(I@K(1),0,@Ix,sizeof  c))
+	static  InlineFunc[_:I@E:32]=# InlineFunc":....";if(I@E(_:@Ia:@Ib:@Ic:@Ib:@Ic:@Id: InlineFunc))for(new a, b[_:@Iy:32], c[_:(YSI_MAX_STRING)];I@F();)while(I@L(I@K(1),0,@Ix,sizeof  c))
 	{
 		// Code.
 	}
@@ -1701,7 +1701,7 @@ main()
 		InlineFunc[32] = "InlineFunc:....";
 	if (Inline_Entry(InlineFunc))
 	{
-		for (new a, b[32], c[130]; Inline_Allocator(); )
+		for (new a, b[32], c[YSI_MAX_STRING]; Inline_Allocator(); )
 		{
 			while (Inline_Main(HAS(const), 0, cellmax, sizeof (c)))
 			{
