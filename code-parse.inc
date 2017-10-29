@@ -18,6 +18,11 @@
 	the Initial Developer. All Rights Reserved.
 */
 
+#if defined _INC_code_parse_inc
+	#endinput
+#endif
+#define _INC_code_parse_inc
+
 // This include provides a handy set of macros for advanced compile-time code
 // analysis and generation.  With this, one can do things like analyse the
 // parameter types for a function, auto-generate call specifiers, and otherwise
