@@ -1820,25 +1820,27 @@ information, and a few more tag macros to handle the `else` case, we can write
 
 ```pawn
 #define PARSER_ISOLATE(%0,%1){%2,%3} _:W@:O@$%1$%0${%2,%3}
-#define W@:O@$$%0${%2,%3} %2(%0)
-#define O@$%1$%0${%2,%3} %3(%0%1)
+#define W@:O@$$%0$(){%2,%3} %2(%0)
+#define O@$%1$%0$(%9){%2,%3} %3(%9%0%1)
 ```
 
 `W@` detects the "nothing" case by matching `$$`, `O@` detects the "something"
 case by matching `$%1$`.  `%0` would in this example contain `const`, `%2` is
 the macro to call when `const` is on its own, `%3` the macro to call when it
 isn't.  Both are passed everything passed in (so `const` alone or the fully
-reassembled symbol).
+reassembled symbol).  We also want to detect that nothing OR spaces comes before
+the `const` (otherwise we still match symbols that end with `const`), so this is
+given in `%9`; passed between brackets since they ignore spaces.
 
 ```pawn
 // `%1` is everything after the space.
-#define HAS_CONST(%9)(%1) %1 has `const`
+#define HAS_CONST(%9)(%1) %1 is `const`
 
 // `%9` is everything before the space.
-#define NO_CONST(%9)(%1) %9 starts with `const`
+#define NO_CONST(%9)(%1) %9 contains `const`
 
 // Think of the brackets and braces here as somewhat like `if () {} else {}`.
-#define DETECT_CONST(const%0\32;%1) PARSER_ISOLATE(const,%0){HAS_CONST,NO_CONST}(%1)
+#define DETECT_CONST(%9const%0\32;%1) PARSER_ISOLATE(%9,const,%0){HAS_CONST,NO_CONST}(%1)
 ```
 
 Note that this code is designed to detect spaces and other awkwardness in
@@ -1849,8 +1851,10 @@ Example use:
 
 ```pawn
 DETECT_CONST(const a) // a has `const`
-DETECT_CONST(constB ) // constB starts with `const`
+DETECT_CONST(constB ) // constB contains `const`
+DETECT_CONST(a_const_var ) // a_const_var contains `const`
 DETECT_CONST(constC) // Won't match.
+DETECT_CONST(      const d) // d is `const`
 ```
 
 The last case is left to you to deal with.  The lack of space detection is

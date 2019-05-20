@@ -48,14 +48,14 @@
 // "const" and tags.
 
 // Detect "const".
-#define c@:%8(%0,%1,%9const%7\32;%2) W@:O@$%7$${PARSER_CONST,PARSER_NOT_CONST}(%8)(%0,%1,%2)
-#define PARSER_CONST(%7)(%8)(%0,%1,%2) %8(%0const ,%1,%2)
-#define PARSER_NOT_CONST(%7)(%8)(%0,%1,%2) %8(%0,%1,const%7%2)
+#define c@:%8(%0,%1,%9const%7\32;%2) W@:O@$%7$const$(%9){PARSER_CONST,PARSER_NOT_CONST}(%8)(%0,%1,%2)
+#define PARSER_CONST(%7)(%8)(%0,%1,%2) %8(%0%7 ,%1,%2)
+#define PARSER_NOT_CONST(%7)(%8)(%0,%1,%2) %8(%0,%1,%7%2)
 
 // Detect the lack of space after a symbol, for example with `const%1\32;`.
-#define PARSER_ISOLATE(%0,%1){%2,%3} _:W@:O@$%1$%0${%2,%3}
-#define W@:O@$$%0${%2,%3} %2(%0)
-#define O@$%1$%0${%2,%3} %3(%0%1)
+#define PARSER_ISOLATE(%9,%0,%1){%2,%3} _:W@:O@$%1$%0$(%9){%2,%3}
+#define W@:O@$$%0$(){%2,%3} %2(%0)
+#define O@$%1$%0$(%9){%2,%3} %3(%9%0%1)
 
 // Detect tags.
 #define t@:%5:A@[%7]%8(%0,%1,%9:%2) %7%8(%0,%1%9:,%2)
