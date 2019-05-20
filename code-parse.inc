@@ -50,7 +50,7 @@
 // Detect "const".
 #define c@:%8(%0,%1,%9const%7\32;%2) T@:O@$%7$const$(%9){PARSER_CONST,PARSER_NOT_CONST}(%8)(%0,%1,%2)
 #define PARSER_CONST(%7)(%8)(%0,%1,%2) %8(%0%7 ,%1,%2)
-#define PARSER_NOT_CONST(%7)(%8)(%0,%1,%2) %8(%0,%1,%7%2)
+#define PARSER_NOT_CONST(%7)(%8)(%0,%1,%2) %8(%0,%1,%7 %2)
 
 // Detect the lack of space after a symbol, for example with `const%1\32;`.
 #define PARSER_ISOLATE(%9,%0,%1){%2,%3} _:T@:O@$%1$%0$(%9){%2,%3}
