@@ -1819,12 +1819,12 @@ information, and a few more tag macros to handle the `else` case, we can write
 `PARSER_ISOLATE`:
 
 ```pawn
-#define PARSER_ISOLATE(%0,%1){%2,%3} _:W@:O@$%1$%0${%2,%3}
-#define W@:O@$$%0$(){%2,%3} %2(%0)
+#define PARSER_ISOLATE(%0,%1){%2,%3} _:T@:O@$%1$%0${%2,%3}
+#define T@:O@$$%0$(){%2,%3} %2(%0)
 #define O@$%1$%0$(%9){%2,%3} %3(%9%0%1)
 ```
 
-`W@` detects the "nothing" case by matching `$$`, `O@` detects the "something"
+`T@` detects the "nothing" case by matching `$$`, `O@` detects the "something"
 case by matching `$%1$`.  `%0` would in this example contain `const`, `%2` is
 the macro to call when `const` is on its own, `%3` the macro to call when it
 isn't.  Both are passed everything passed in (so `const` alone or the fully
