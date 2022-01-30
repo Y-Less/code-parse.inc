@@ -1378,7 +1378,7 @@ the wrong place - this might work slightly, but not fully.
 Function qualifiers are the bits that come before the name, i.e. `stock`,
 `static`, `const`, `new`, `operator`, `forward`, `public`, and `native`.  If you
 are using YSI, this extends to include `global`, `foreign`, `timer`, `inline`,
-`ptask`, `task`, `remoterunc`, `hook`, `group_hook`, `master_hook`,
+`ptask`, `task`, `remotefunc`, `hook`, `group_hook`, `master_hook`,
 `master_task`, `master_ptask`, `master_func`, `@foreign`, `@global`,
 `timerfunc`, `loadtext`, `pvar`, and `svar`.  Several are only valid on
 variables, `const` and `inline` are only used on inline functions, and more of
