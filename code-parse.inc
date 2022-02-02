@@ -175,7 +175,7 @@
 #define timere@[%5]        %5_timer()
 #define ptaske@[%5]        %5_ptask()
 #define taske@[%5]         %5_task()
-#define remoterunce@[%5]   %5_remoterunc()
+#define remotefunce@[%5]   %5_remotefunc()
 #define hooke@[%5]         %5_hook()
 #define inlinee@[%5]       %5_inline()
 #define group_hooke@[%5]   %5_group_hook()
