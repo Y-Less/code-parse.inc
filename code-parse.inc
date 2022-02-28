@@ -23,10 +23,22 @@
 #endif
 #define _INC_code_parse_inc
 
-// This include provides a handy set of macros for advanced compile-time code
-// analysis and generation.  With this, one can do things like analyse the
-// parameter types for a function, auto-generate call specifiers, and otherwise
-// create code-dependent macros.
+/**
+ * <library
+ *   name="code-parse"
+ *   summary="Compile-time code analysis and generation"
+ *   license="(c) 2022, Alex "Y_Less" Cole, licensed under MPL 1.1"
+ * >
+ *   <remarks>
+ *     This include provides a handy set of macros for advanced compile-time
+ *     code analysis and generation.  With this, one can do things like analyse
+ *     the parameter types for a function, auto-generate call specifiers, and
+ *     otherwise create code-dependent macros.
+ *   </remarks>
+ * </library>
+ */
+
+///
 
 // Remove this tag from any final output after all other parsing is done.
 #define string:
