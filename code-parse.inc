@@ -27,7 +27,7 @@
  * <library
  *   name="code-parse"
  *   summary="Compile-time code analysis and generation"
- *   license="(c) 2022, Alex "Y_Less" Cole, licensed under MPL 1.1"
+ *   license="Copyright (c) 2022 Alex &quot;Y_Less&quot; Cole.  Licensed under MPL 1.1"
  * >
  *   <remarks>
  *     This include provides a handy set of macros for advanced compile-time
