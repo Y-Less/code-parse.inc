@@ -29,6 +29,12 @@
  *   summary="Compile-time code analysis and generation"
  *   license="Copyright (c) 2022 Alex &quot;Y_Less&quot; Cole.  Licensed under MPL 1.1"
  * >
+ *   <summary pawndoc="true">
+ *     This library uses the enhanced <em>pawndoc.xsl</em> from
+ *     <a href="https://github.com/pawn-lang/pawndoc">pawn-lang/pawndoc</a>.
+ *     This XSL has features such as library and markdown support, and will not
+ *     render this message when used.
+ *   </summary>
  *   <remarks>
  *     This include provides a handy set of macros for advanced compile-time
  *     code analysis and generation.  With this, one can do things like analyse
