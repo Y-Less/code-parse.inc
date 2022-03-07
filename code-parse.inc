@@ -44,7 +44,7 @@
  * </library>
  */
 
-///
+/// <p/>
 
 // Remove this tag from any final output after all other parsing is done.
 #define string:
