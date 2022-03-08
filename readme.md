@@ -1637,7 +1637,7 @@ your own input to the magical `PARSER@FUNC:` macro:
 ```pawn
 #define void:
 #define string:
-#define u@$ 0]);
+#define u@$ 1]);
 #define PARSER@FUNC:%0$ u@(u[_:%0 u@$
 #define c@:%8(%0,%1,%9const%2) %8(%0const ,%1,%9%2)
 #define t@:%8(%0,%1,%9:%2) %8(%0,%1%9:,%2)

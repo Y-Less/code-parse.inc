@@ -52,7 +52,7 @@
 
 // A very generic entry point.  This can be used by any other system to put
 // arbitrary macros at the top level of the file without compiler errors.
-#define u@$ 0]);
+#define u@$ 1]);
 #define PARSER@FUNC:%0$ u@(u[_:%0 u@$
 
 // This is the "global" entry point.  It takes a list of parser types, followed
