@@ -53,6 +53,9 @@
 // A very generic entry point.  This can be used by any other system to put
 // arbitrary macros at the top level of the file without compiler errors.
 #define __code_parse_u@_1
+#if defined u@
+	#undef u@
+#endif
 #define u@$ 1]);
 #define PARSER@FUNC:%0$ u@(u[_:%0 u@$
 
