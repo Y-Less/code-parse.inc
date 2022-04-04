@@ -52,10 +52,11 @@
 
 // A very generic entry point.  This can be used by any other system to put
 // arbitrary macros at the top level of the file without compiler errors.
-#define __code_parse_u@_1
-#if defined u@
+#if defined u@ && !defined __script_init_u@_1 && !defined __foreach_u@_1 && !defined __CodeParse_FirstPass
+	// Defined earlier by an old version of YSI.
 	#undef u@
 #endif
+#define __code_parse_u@_1
 #define u@$ 1]);
 #define PARSER@FUNC:%0$ u@(u[_:%0 u@$
 
@@ -705,4 +706,6 @@
 #define PARSE@ARRAY_MULTI_TAGGROUP_CONST PARSE@ARR_CST_GRP_MUL
 #define PARSE@MULTI_ARRAY_TAGGROUP_CONST PARSE@ARR_CST_GRP_MUL
 #define PARSE@MULTI_TAGGROUP_ARRAY_CONST PARSE@ARR_CST_GRP_MUL
+
+forward __CodeParse_FirstPass();
 
