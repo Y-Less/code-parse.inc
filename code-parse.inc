@@ -52,9 +52,14 @@
 
 // A very generic entry point.  This can be used by any other system to put
 // arbitrary macros at the top level of the file without compiler errors.
-#if defined u@ && !defined __script_init_u@_1 && !defined __foreach_u@_1 && !defined __CodeParse_FirstPass
+#if defined __CodeParse_UndefU
 	// Defined earlier by an old version of YSI.
 	#undef u@
+	forward __CodeParse_UndefU();
+#elseif defined u@ && !defined __script_init_u@_1 && !defined __foreach_u@_1 && !defined __CodeParse_FirstPass
+	// Defined earlier by an old version of YSI.
+	#undef u@
+	forward __CodeParse_UndefU();
 #endif
 #define __code_parse_u@_1
 #define u@$ 1]);
