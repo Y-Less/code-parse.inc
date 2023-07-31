@@ -194,8 +194,9 @@
 #define conste@[%5]    %5_const()
 #define forwarde@[%5]  %5_forward()
 #define newe@[%5]      %5_new()
-#define operatore@[%5] %5_state()
+#define operatore@[%5] %5_operator()
 #define nativee@[%5]   %5_native()
+#define statee@[%5]    %5_state()
 
 // YSI keywords.
 #define globale@[%5]       %5_global()
